@@ -40,7 +40,7 @@ import java.util.*
 class DateConverter {
 
   @TypeConverter
-  fun fromTimestamp(value: Long?): Date? {
+  fun fromTimestamp(value: Long?): Date {
     return Date(value ?: 0)
   }
 

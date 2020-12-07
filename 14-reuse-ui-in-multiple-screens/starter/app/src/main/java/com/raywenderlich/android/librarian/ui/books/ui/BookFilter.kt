@@ -1,13 +1,9 @@
 package com.raywenderlich.android.librarian.ui.books.ui
 
-import androidx.compose.foundation.Text
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ColumnScope.align
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.RadioButton
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -43,38 +39,49 @@ fun BookFilter(
   val currentGenreFilter = remember { mutableStateOf<Genre?>(null) }
   val currentRatingFilter = remember { mutableStateOf(0) }
 
-  Column(modifier = Modifier.align(Alignment.CenterHorizontally),
-    horizontalAlignment = Alignment.CenterHorizontally) {
+  Column(
+    modifier = with(ColumnScope) { Modifier.align(Alignment.CenterHorizontally) },
+    horizontalAlignment = Alignment.CenterHorizontally
+  ) {
 
     Column {
       Row {
-        RadioButton(selected = currentFilter.value == 0,
+        RadioButton(
+          selected = currentFilter.value == 0,
           onClick = { currentFilter.value = 0 },
-          modifier = Modifier.padding(8.dp))
+          modifier = Modifier.padding(8.dp)
+        )
 
-        Text(text = stringResource(id = R.string.no_filter),
+        Text(
+          text = stringResource(id = R.string.no_filter),
           modifier = Modifier.align(Alignment.CenterVertically),
           color = MaterialTheme.colors.onPrimary
         )
       }
 
       Row {
-        RadioButton(selected = currentFilter.value == 1,
+        RadioButton(
+          selected = currentFilter.value == 1,
           onClick = { currentFilter.value = 1 },
-          modifier = Modifier.padding(8.dp))
+          modifier = Modifier.padding(8.dp)
+        )
 
-        Text(text = stringResource(id = R.string.filter_by_genre),
+        Text(
+          text = stringResource(id = R.string.filter_by_genre),
           modifier = Modifier.align(Alignment.CenterVertically),
           color = MaterialTheme.colors.onPrimary
         )
       }
 
       Row {
-        RadioButton(selected = currentFilter.value == 2,
+        RadioButton(
+          selected = currentFilter.value == 2,
           onClick = { currentFilter.value = 2 },
-          modifier = Modifier.padding(8.dp))
+          modifier = Modifier.padding(8.dp)
+        )
 
-        Text(text = stringResource(id = R.string.filter_by_rating),
+        Text(
+          text = stringResource(id = R.string.filter_by_rating),
           modifier = Modifier.align(Alignment.CenterVertically),
           color = MaterialTheme.colors.onPrimary
         )

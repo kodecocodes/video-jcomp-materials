@@ -39,13 +39,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.compose.animation.animate
-import androidx.compose.foundation.Icon
-import androidx.compose.foundation.layout.ColumnScope.align
-import androidx.compose.foundation.layout.RowScope.align
-import androidx.compose.foundation.layout.Stack
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.FloatingActionButton
+import androidx.compose.material.Icon
 import androidx.compose.material.Scaffold
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -79,14 +78,11 @@ class ReadingListFragment : Fragment() {
 
   val readingListsState = mutableStateOf(emptyList<ReadingListsWithBooks>())
 
-  private val _isShowingAddReadingListState = mutableStateOf(false)
-  private val _deleteListState = mutableStateOf<ReadingListsWithBooks?>(null)
-
   override fun onCreateView(
     inflater: LayoutInflater,
     container: ViewGroup?,
     savedInstanceState: Bundle?
-  ): View? {
+  ): View {
     return ComposeView(requireContext()).apply {
       setContent {
         LibrarianTheme {
@@ -107,18 +103,19 @@ class ReadingListFragment : Fragment() {
 
   @Composable
   fun ReadingListContentWrapper() {
-    Stack(
-      modifier = Modifier
-        .fillMaxSize()
-        .align(Alignment.CenterVertically)
-        .align(Alignment.CenterHorizontally)
+    Box(
+      modifier = with(BoxScope) {
+        Modifier
+          .fillMaxSize()
+          .align(Alignment.Center)
+      }
     ) {
       ReadingLists(
         readingLists = readingListsState.value,
         onItemClick = { readingList -> onItemSelected(readingList) },
-        onLongItemTap = { _deleteListState.value = it })
+        onLongItemTap = { readingListViewModel.onDeleteReadingList(it) })
 
-      val isShowingAddList = _isShowingAddReadingListState.value
+      val isShowingAddList = readingListViewModel.isShowingAddReadingListState.value ?: false
 
       if (isShowingAddList) {
         AddReadingList(
@@ -129,7 +126,7 @@ class ReadingListFragment : Fragment() {
           })
       }
 
-      val deleteList = _deleteListState.value
+      val deleteList = readingListViewModel.deleteReadingListState.value
 
       if (deleteList != null) {
         DeleteDialog(
@@ -153,7 +150,7 @@ class ReadingListFragment : Fragment() {
     FloatingActionButton(modifier = Modifier.size(size),
       onClick = { readingListViewModel.onAddReadingListTapped() }
     ) {
-      Icon(asset = Icons.Default.Add)
+      Icon(imageVector = Icons.Default.Add)
     }
   }
 

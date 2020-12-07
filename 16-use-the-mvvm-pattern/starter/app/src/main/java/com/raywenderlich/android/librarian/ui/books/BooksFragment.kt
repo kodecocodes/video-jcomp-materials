@@ -38,10 +38,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.compose.foundation.Icon
-import androidx.compose.foundation.layout.ColumnScope.align
-import androidx.compose.foundation.layout.RowScope.align
-import androidx.compose.foundation.layout.Stack
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -56,7 +54,6 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.res.stringResource
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.lifecycleScope
 import com.raywenderlich.android.librarian.R
 import com.raywenderlich.android.librarian.model.Book
@@ -76,6 +73,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+
 private const val REQUEST_CODE_ADD_BOOK = 201
 
 @AndroidEntryPoint
@@ -93,7 +91,7 @@ class BooksFragment : Fragment() {
   override fun onCreateView(
     inflater: LayoutInflater, container: ViewGroup?,
     savedInstanceState: Bundle?
-  ): View? {
+  ): View {
     return ComposeView(requireContext()).apply {
       setContent {
         LibrarianTheme {
@@ -101,12 +99,6 @@ class BooksFragment : Fragment() {
         }
       }
     }
-  }
-
-  override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-    super.onViewCreated(view, savedInstanceState)
-    loadGenres()
-    loadBooks()
   }
 
   @Composable
@@ -147,31 +139,25 @@ class BooksFragment : Fragment() {
       drawerContent = { BookFilterModalDrawerContent(bookFilterDrawerState) },
       drawerState = bookFilterDrawerState,
       bodyContent = {
-        Stack(
-          modifier = Modifier
-            .align(Alignment.CenterHorizontally)
-            .align(Alignment.CenterVertically)
-            .fillMaxSize()
-        ) {
-          BooksList(books, onItemLongTap = { bookAndGenre ->
-            _deleteBookState.value = bookAndGenre
-          })
 
+        Box(modifier = with(BoxScope) {
+          Modifier
+            .align(Alignment.Center)
+            .fillMaxSize()
+        }) {
           val bookToDelete = _deleteBookState.value
 
           if (bookToDelete != null) {
-            DeleteDialog(
-              item = bookToDelete,
+            DeleteDialog(item = bookToDelete,
               message = stringResource(id = R.string.delete_message, bookToDelete.book.name),
               onDeleteItem = {
                 removeBook(it.book)
                 _deleteBookState.value = null
               },
-              onDismiss = {
-                _deleteBookState.value = null
-              }
-            )
+              onDismiss = { _deleteBookState.value = null })
           }
+
+          BooksList(books, onLongItemTap = { _deleteBookState.value = it })
         }
       })
   }
@@ -190,14 +176,20 @@ class BooksFragment : Fragment() {
   @Composable
   fun AddNewBook(bookFilterDrawerState: BottomDrawerState) {
     FloatingActionButton(
-      icon = { Icon(Icons.Filled.Add) },
+      content = { Icon(Icons.Filled.Add) },
       onClick = {
         bookFilterDrawerState.close { showAddBook() }
       },
     )
   }
 
-  fun loadGenres() {
+  override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    super.onViewCreated(view, savedInstanceState)
+    loadGenres()
+    loadBooks()
+  }
+
+  private fun loadGenres() {
     lifecycleScope.launch {
       val genres = repository.getGenres()
 

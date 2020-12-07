@@ -38,18 +38,11 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.foundation.Icon
 import androidx.compose.foundation.ScrollableColumn
-import androidx.compose.foundation.Text
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.layout.ColumnScope.align
-import androidx.compose.foundation.layout.RowScope.align
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Card
-import androidx.compose.material.FloatingActionButton
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Scaffold
+import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.runtime.Composable
@@ -145,7 +138,7 @@ class BookReviewDetailsActivity : AppCompatActivity() {
   @Composable
   fun AddReadingEntry() {
     FloatingActionButton(onClick = { _isShowingAddEntryState.value = true }) {
-      Icon(asset = Icons.Default.Add)
+      Icon(imageVector = Icons.Default.Add)
     }
   }
 
@@ -154,10 +147,11 @@ class BookReviewDetailsActivity : AppCompatActivity() {
     val bookReview = _bookReviewDetailsState.value
     val genre = _genreState.value
 
-    Stack(
-      modifier = Modifier.fillMaxSize()
-        .align(Alignment.CenterVertically)
-        .align(Alignment.CenterHorizontally)
+    Box(
+      modifier = with(BoxScope) {
+        Modifier.fillMaxSize()
+          .align(Alignment.Center)
+      }
     ) {
       ScrollableColumn(
         modifier = Modifier.fillMaxSize(),

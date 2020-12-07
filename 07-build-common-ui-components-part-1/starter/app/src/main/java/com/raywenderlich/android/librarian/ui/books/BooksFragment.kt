@@ -38,8 +38,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.compose.foundation.Icon
-import androidx.compose.foundation.Text
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -47,12 +45,10 @@ import androidx.compose.material.icons.filled.Edit
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.ComposeView
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.lifecycleScope
-import androidx.ui.tooling.preview.Preview
 import com.raywenderlich.android.librarian.R
 import com.raywenderlich.android.librarian.model.Book
 import com.raywenderlich.android.librarian.model.Genre
@@ -61,6 +57,7 @@ import com.raywenderlich.android.librarian.repository.LibrarianRepository
 import com.raywenderlich.android.librarian.ui.books.filter.ByGenre
 import com.raywenderlich.android.librarian.ui.books.filter.ByRating
 import com.raywenderlich.android.librarian.ui.books.filter.Filter
+import com.raywenderlich.android.librarian.ui.books.ui.BookFilter
 import com.raywenderlich.android.librarian.ui.composeUi.TopBar
 import com.raywenderlich.android.librarian.utils.toast
 import dagger.hilt.android.AndroidEntryPoint
@@ -83,7 +80,7 @@ class BooksFragment : Fragment() {
   override fun onCreateView(
     inflater: LayoutInflater, container: ViewGroup?,
     savedInstanceState: Bundle?
-  ): View? {
+  ): View {
     return ComposeView(requireContext()).apply {
       setContent {
         BooksContent()
@@ -93,35 +90,61 @@ class BooksFragment : Fragment() {
 
   @Composable
   fun BooksContent() {
-    Scaffold(topBar = { BooksTopBar() },
-      floatingActionButton = { AddNewBook() }) {
+    val bookFilterDrawerState = rememberBottomDrawerState(initialValue = BottomDrawerValue.Closed)
 
+    Scaffold(topBar = { BooksTopBar(bookFilterDrawerState) },
+      floatingActionButton = { AddNewBook(bookFilterDrawerState) }) {
+      BookFilterModalDrawer(bookFilterDrawerState)
     }
   }
 
   @Composable
-  fun BooksTopBar() {
+  fun BooksTopBar(bookFilterDrawerState: BottomDrawerState) {
     TopBar(
       title = stringResource(id = R.string.my_books_title),
-      actions = { FilterButton() })
+      actions = { FilterButton(bookFilterDrawerState) })
   }
 
   @Composable
-  fun FilterButton() {
+  fun FilterButton(bookFilterDrawerState: BottomDrawerState) {
     IconButton(onClick = {
-
+      if (!bookFilterDrawerState.isClosed) {
+        bookFilterDrawerState.close()
+      } else {
+        bookFilterDrawerState.expand()
+      }
     }) {
       Icon(Icons.Default.Edit, tint = Color.White)
     }
   }
 
   @Composable
-  @Preview
-  fun AddNewBook() {
+  fun BookFilterModalDrawer(bookFilterDrawerState: BottomDrawerState) {
+    val books = _booksState.value ?: emptyList()
+
+    BottomDrawerLayout(
+      drawerContent = { BookFilterModalDrawerContent(bookFilterDrawerState) },
+      drawerState = bookFilterDrawerState,
+      bodyContent = { BooksList(books) })
+  }
+
+  @Composable
+  fun BookFilterModalDrawerContent(bookFilterDrawerState: BottomDrawerState) {
+    val genres = _genresState.value ?: emptyList()
+
+    BookFilter(filter, genres, onFilterSelected = {
+      bookFilterDrawerState.close()
+      this.filter = it
+      loadBooks()
+    })
+  }
+
+  @Composable
+  fun AddNewBook(bookFilterDrawerState: BottomDrawerState) {
     FloatingActionButton(
-      icon = { Icon(Icons.Filled.Add) },
+      content = { Icon(Icons.Filled.Add) },
       onClick = {
-        showAddBook()
+        bookFilterDrawerState.close { showAddBook() }
       },
     )
   }
@@ -132,7 +155,7 @@ class BooksFragment : Fragment() {
     loadBooks()
   }
 
-  fun loadGenres() {
+  private fun loadGenres() {
     lifecycleScope.launch {
       val genres = repository.getGenres()
 

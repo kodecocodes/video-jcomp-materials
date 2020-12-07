@@ -1,12 +1,8 @@
 package com.raywenderlich.android.librarian.ui.books.ui
 
-import androidx.compose.foundation.Text
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ColumnScope.align
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.RadioButton
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -42,35 +38,48 @@ fun BookFilter(
   val currentGenreFilter = remember { mutableStateOf<Genre?>(null) }
   val currentRatingFilter = remember { mutableStateOf(0) }
 
-  Column(modifier = Modifier.align(Alignment.CenterHorizontally),
-    horizontalAlignment = Alignment.CenterHorizontally) {
+  Column(
+    modifier = with(ColumnScope) { Modifier.align(Alignment.CenterHorizontally) },
+    horizontalAlignment = Alignment.CenterHorizontally
+  ) {
 
     Column {
       Row {
-        RadioButton(selected = currentFilter.value == 0,
-          onClick = { currentFilter.value = 0 },
-          modifier = Modifier.padding(8.dp))
+        RadioButton(
+          selected = currentFilter.value == 0, onClick = { currentFilter.value = 0 },
+          modifier = Modifier.padding(8.dp)
+        )
 
-        Text(text = stringResource(id = R.string.no_filter),
-          modifier = Modifier.align(Alignment.CenterVertically))
+        Text(
+          text = stringResource(id = R.string.no_filter),
+          modifier = Modifier.align(Alignment.CenterVertically)
+        )
       }
 
       Row {
-        RadioButton(selected = currentFilter.value == 1,
+        RadioButton(
+          selected = currentFilter.value == 1,
           onClick = { currentFilter.value = 1 },
-          modifier = Modifier.padding(8.dp))
+          modifier = Modifier.padding(8.dp)
+        )
 
-        Text(text = stringResource(id = R.string.filter_by_genre),
-          modifier = Modifier.align(Alignment.CenterVertically))
+        Text(
+          text = stringResource(id = R.string.filter_by_genre),
+          modifier = Modifier.align(Alignment.CenterVertically)
+        )
       }
 
       Row {
-        RadioButton(selected = currentFilter.value == 2,
+        RadioButton(
+          selected = currentFilter.value == 2,
           onClick = { currentFilter.value = 2 },
-          modifier = Modifier.padding(8.dp))
+          modifier = Modifier.padding(8.dp)
+        )
 
-        Text(text = stringResource(id = R.string.filter_by_rating),
-          modifier = Modifier.align(Alignment.CenterVertically))
+        Text(
+          text = stringResource(id = R.string.filter_by_rating),
+          modifier = Modifier.align(Alignment.CenterVertically)
+        )
       }
     }
 
@@ -80,17 +89,25 @@ fun BookFilter(
       GenrePicker(
         genres = genres,
         selectedGenreId = currentlySelectedGenre?.id ?: "",
-        onItemPicked = { currentGenreFilter.value = it })
+        onItemPicked = {
+          currentGenreFilter.value = it
+        }
+      )
     }
 
     if (currentFilter.value == 2) {
-      RatingBar(range = 1..5,
+      RatingBar(
+        range = 1..5,
         currentRating = currentRatingFilter.value,
         isLargeRating = true,
         onRatingChanged = { newRating -> currentRatingFilter.value = newRating })
     }
 
+    val isGenreValid = currentlySelectedGenre != null && currentlySelectedGenre.id.isNotEmpty()
+    val isFilterValid = (currentFilter.value == 1 && isGenreValid) || currentFilter.value != 1
+
     ActionButton(
+      isEnabled = isFilterValid,
       modifier = Modifier.fillMaxWidth(),
       text = stringResource(id = R.string.confirm_filter),
       onClick = {

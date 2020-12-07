@@ -147,8 +147,8 @@ class AddBookActivity : AppCompatActivity(), AddBookView {
         onClick = { addBookViewModel.onAddBookTapped() },
         modifier = Modifier.fillMaxWidth(),
         isEnabled = bookNameState.value.isNotEmpty()
-          && bookDescriptionState.value.isNotEmpty()
-          && _addBookState.value.genreId.isNotEmpty()
+            && bookDescriptionState.value.isNotEmpty()
+            && _addBookState.value.genreId.isNotEmpty()
       )
     }
   }

@@ -1,8 +1,9 @@
 package com.raywenderlich.android.librarian.ui.composeUi
 
 import androidx.annotation.StringRes
-import androidx.compose.foundation.Text
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.ButtonConstants.defaultButtonColors
+import androidx.compose.material.Text
 import androidx.compose.material.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -19,10 +20,9 @@ fun DialogButton(
   onClickAction: () -> Unit
 ) {
   TextButton(
-    modifier = modifier.padding(start = 8.dp, end = 8.dp, top = 8.dp, bottom = 8.dp),
-    backgroundColor = colorResource(id = R.color.colorPrimary),
-    contentColor = Color.White,
-    onClick = onClickAction
+    onClick = onClickAction,
+    modifier = modifier.padding(8.dp),
+    colors = defaultButtonColors(colorResource(id = R.color.colorPrimary), Color.White)
   ) {
     Text(text = stringResource(id = text))
   }

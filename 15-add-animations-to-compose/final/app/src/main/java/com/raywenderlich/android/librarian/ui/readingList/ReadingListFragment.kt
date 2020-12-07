@@ -39,13 +39,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.compose.animation.animate
-import androidx.compose.foundation.Icon
-import androidx.compose.foundation.layout.ColumnScope.align
-import androidx.compose.foundation.layout.RowScope.align
-import androidx.compose.foundation.layout.Stack
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.FloatingActionButton
+import androidx.compose.material.Icon
 import androidx.compose.material.Scaffold
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -79,7 +78,6 @@ class ReadingListFragment : Fragment() {
   lateinit var repository: LibrarianRepository
 
   val readingListsState = mutableStateOf(emptyList<ReadingListsWithBooks>())
-
   private val _isShowingAddReadingListState = mutableStateOf(false)
   private val _deleteListState = mutableStateOf<ReadingListsWithBooks?>(null)
 
@@ -87,7 +85,7 @@ class ReadingListFragment : Fragment() {
     inflater: LayoutInflater,
     container: ViewGroup?,
     savedInstanceState: Bundle?
-  ): View? {
+  ): View {
     return ComposeView(requireContext()).apply {
       setContent {
         LibrarianTheme {
@@ -119,10 +117,11 @@ class ReadingListFragment : Fragment() {
 
   @Composable
   fun ReadingListContentWrapper() {
-    Stack(
-      modifier = Modifier.fillMaxSize()
-        .align(Alignment.CenterVertically)
-        .align(Alignment.CenterHorizontally)
+    Box(
+      modifier = with(BoxScope) {
+        Modifier.fillMaxSize()
+          .align(Alignment.Center)
+      }
     ) {
       ReadingLists(
         readingLists = readingListsState.value,
@@ -132,12 +131,14 @@ class ReadingListFragment : Fragment() {
       val isShowingAddList = _isShowingAddReadingListState.value
 
       if (isShowingAddList) {
-        AddReadingList(
-          onDismiss = { _isShowingAddReadingListState.value = false },
-          onAddList = { name ->
-            addReadingList(name)
+        AddReadingList(onAddList = {
+          addReadingList(it)
+          _isShowingAddReadingListState.value = false
+        },
+          onDismiss = {
             _isShowingAddReadingListState.value = false
-          })
+          }
+        )
       }
 
       val deleteList = _deleteListState.value
@@ -165,7 +166,7 @@ class ReadingListFragment : Fragment() {
       onClick = {
         _isShowingAddReadingListState.value = true
       }) {
-      Icon(asset = Icons.Default.Add)
+      Icon(imageVector = Icons.Default.Add)
     }
   }
 

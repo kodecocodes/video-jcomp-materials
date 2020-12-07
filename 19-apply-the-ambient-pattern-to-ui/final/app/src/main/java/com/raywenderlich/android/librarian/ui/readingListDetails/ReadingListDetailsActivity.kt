@@ -39,10 +39,8 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.foundation.Icon
-import androidx.compose.foundation.layout.ColumnScope.align
-import androidx.compose.foundation.layout.RowScope.align
-import androidx.compose.foundation.layout.Stack
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -70,7 +68,7 @@ import dagger.hilt.android.AndroidEntryPoint
 class ReadingListDetailsActivity : AppCompatActivity() {
 
   private val readingListDetailsViewModel by viewModels<ReadingListDetailsViewModel>()
-  private val ReadingList = ambientOf<ReadingListsWithBooks?>()
+  private val readingList = ambientOf<ReadingListsWithBooks?>()
 
   companion object {
     private const val KEY_READING_LIST = "reading_list"
@@ -106,7 +104,7 @@ class ReadingListDetailsActivity : AppCompatActivity() {
     val readingListState by readingListDetailsViewModel.readingListState.observeAsState()
     val bottomDrawerState = rememberBottomDrawerState(initialValue = BottomDrawerValue.Closed)
 
-    Providers(ReadingList provides readingListState) {
+    Providers(readingList provides readingListState) {
       Scaffold(
         topBar = { ReadingListDetailsTopBar() },
         floatingActionButton = { AddBookToReadingList(bottomDrawerState) }
@@ -125,13 +123,13 @@ class ReadingListDetailsActivity : AppCompatActivity() {
         bottomDrawerState.expand()
       }
     }) {
-      Icon(asset = Icons.Default.Add, tint = MaterialTheme.colors.onSecondary)
+      Icon(imageVector = Icons.Default.Add, tint = MaterialTheme.colors.onSecondary)
     }
   }
 
   @Composable
   fun ReadingListDetailsTopBar() {
-    val readingList = ReadingList.current
+    val readingList = readingList.current
     val title = readingList?.name ?: stringResource(id = R.string.reading_list)
 
     TopBar(title = title, onBackPressed = { onBackPressed() })
@@ -141,7 +139,7 @@ class ReadingListDetailsActivity : AppCompatActivity() {
   fun ReadingListDetailsModalDrawer(
     drawerState: BottomDrawerState
   ) {
-    val readingList = ReadingList.current
+    val readingList = readingList.current
     val deleteBookState by readingListDetailsViewModel.deleteBookState.observeAsState()
     val bookToDelete = deleteBookState
 
@@ -156,15 +154,16 @@ class ReadingListDetailsActivity : AppCompatActivity() {
           addBookState
         )
       }) {
-      Stack(
-        modifier = Modifier
-          .align(Alignment.CenterHorizontally)
-          .align(Alignment.CenterVertically)
-          .fillMaxSize()
+      Box(
+        modifier = with(BoxScope) {
+          Modifier
+            .align(Alignment.Center)
+            .fillMaxSize()
+        }
       ) {
         BooksList(
           readingList?.books ?: emptyList(),
-          onItemLongTap = { book -> readingListDetailsViewModel.onItemLongTapped(book) }
+          onLongItemTap = { book -> readingListDetailsViewModel.onItemLongTapped(book) }
         )
 
         if (bookToDelete != null) {

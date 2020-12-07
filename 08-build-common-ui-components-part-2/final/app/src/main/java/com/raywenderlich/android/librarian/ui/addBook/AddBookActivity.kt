@@ -105,7 +105,7 @@ class AddBookActivity : AppCompatActivity(), AddBookView {
 
   @Composable
   fun AddBookFormContent() {
-    val genres = _genresState.value ?: emptyList()
+    val genres = _genresState.value
     val bookNameState = remember { mutableStateOf("") }
     val bookDescriptionState = remember { mutableStateOf("") }
 

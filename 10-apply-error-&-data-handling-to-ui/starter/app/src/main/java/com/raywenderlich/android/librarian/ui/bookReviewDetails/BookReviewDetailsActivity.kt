@@ -38,8 +38,8 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.foundation.Icon
 import androidx.compose.material.FloatingActionButton
+import androidx.compose.material.Icon
 import androidx.compose.material.Scaffold
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -112,7 +112,7 @@ class BookReviewDetailsActivity : AppCompatActivity() {
   @Composable
   fun AddReadingEntry() {
     FloatingActionButton(onClick = { }) {
-      Icon(asset = Icons.Default.Add)
+      Icon(imageVector = Icons.Default.Add)
     }
   }
 

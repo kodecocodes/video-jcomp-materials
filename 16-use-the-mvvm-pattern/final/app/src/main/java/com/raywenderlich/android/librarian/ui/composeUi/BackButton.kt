@@ -1,13 +1,13 @@
 package com.raywenderlich.android.librarian.ui.composeUi
 
-import androidx.compose.foundation.Icon
+import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.Preview
 
 @Composable
 @Preview
@@ -17,7 +17,7 @@ fun BackButton(
 ) {
   IconButton(
     modifier = modifier,
-    icon = {
+    content = {
       Icon(
         Icons.Default.ArrowBack,
         tint = MaterialTheme.colors.onSecondary

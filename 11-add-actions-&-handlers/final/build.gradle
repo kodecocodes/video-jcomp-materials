@@ -3,7 +3,7 @@
 buildscript {
 
     ext {
-        kotlin_version = '1.4.0'
+        kotlin_version = '1.4.20'
         compileSdkVersion = 30
         targetSdkVersion = compileSdkVersion
         minSdkVersion = 23
@@ -16,7 +16,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:4.2.0-alpha12'
+        classpath 'com.android.tools.build:gradle:7.0.0-alpha02'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath 'com.google.dagger:hilt-android-gradle-plugin:2.28.3-alpha'
 
@@ -35,7 +35,7 @@ allprojects {
         gson = '2.8.2'
         retrofit = '2.9.0'
         okHttp = '4.8.1'
-        compose = "1.0.0-alpha03"
+        compose = "1.0.0-alpha08"
     }
 }
 

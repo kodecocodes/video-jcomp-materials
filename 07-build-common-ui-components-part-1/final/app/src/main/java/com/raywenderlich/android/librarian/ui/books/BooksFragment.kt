@@ -38,7 +38,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.compose.foundation.Icon
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -81,7 +80,7 @@ class BooksFragment : Fragment() {
   override fun onCreateView(
     inflater: LayoutInflater, container: ViewGroup?,
     savedInstanceState: Bundle?
-  ): View? {
+  ): View {
     return ComposeView(requireContext()).apply {
       setContent {
         BooksContent()
@@ -143,7 +142,7 @@ class BooksFragment : Fragment() {
   @Composable
   fun AddNewBook(bookFilterDrawerState: BottomDrawerState) {
     FloatingActionButton(
-      icon = { Icon(Icons.Filled.Add) },
+      content = { Icon(Icons.Filled.Add) },
       onClick = {
         bookFilterDrawerState.close { showAddBook() }
       },
@@ -156,7 +155,7 @@ class BooksFragment : Fragment() {
     loadBooks()
   }
 
-  fun loadGenres() {
+  private fun loadGenres() {
     lifecycleScope.launch {
       val genres = repository.getGenres()
 

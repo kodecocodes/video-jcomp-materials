@@ -38,14 +38,9 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.foundation.Text
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.DropdownMenu
-import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.Scaffold
-import androidx.compose.material.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -53,7 +48,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.setContent
 import androidx.compose.ui.res.stringResource
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.lifecycleScope
 import com.raywenderlich.android.librarian.R
 import com.raywenderlich.android.librarian.model.Book
@@ -61,6 +55,7 @@ import com.raywenderlich.android.librarian.model.Genre
 import com.raywenderlich.android.librarian.model.state.AddBookState
 import com.raywenderlich.android.librarian.repository.LibrarianRepository
 import com.raywenderlich.android.librarian.ui.composeUi.ActionButton
+import com.raywenderlich.android.librarian.ui.composeUi.GenrePicker
 import com.raywenderlich.android.librarian.ui.composeUi.InputField
 import com.raywenderlich.android.librarian.ui.composeUi.TopBar
 import dagger.hilt.android.AndroidEntryPoint
@@ -70,8 +65,8 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class AddBookActivity : AppCompatActivity(), AddBookView {
 
-  private val _addBookState = MutableLiveData(AddBookState())
-  private val _genresState = MutableLiveData(emptyList<Genre>())
+  private val _addBookState = mutableStateOf(AddBookState())
+  private val _genresState = mutableStateOf(emptyList<Genre>())
 
   @Inject
   lateinit var repository: LibrarianRepository
@@ -110,12 +105,9 @@ class AddBookActivity : AppCompatActivity(), AddBookView {
 
   @Composable
   fun AddBookFormContent() {
-    val genres = _genresState.value ?: emptyList()
-    val isGenresPickerOpen = remember { mutableStateOf(false) }
+    val genres = _genresState.value
     val bookNameState = remember { mutableStateOf("") }
     val bookDescriptionState = remember { mutableStateOf("") }
-    val selectedGenreName =
-      genres.firstOrNull { it.id == _addBookState.value?.genreId }?.name ?: "None"
 
     Column(
       modifier = Modifier.fillMaxSize(),
@@ -126,7 +118,7 @@ class AddBookActivity : AppCompatActivity(), AddBookView {
         value = bookNameState.value,
         onStateChanged = { newValue ->
           bookNameState.value = newValue
-          _addBookState.value = _addBookState.value?.copy(name = newValue)
+          _addBookState.value = _addBookState.value.copy(name = newValue)
         },
         label = stringResource(id = R.string.book_title_hint)
       )
@@ -135,34 +127,16 @@ class AddBookActivity : AppCompatActivity(), AddBookView {
         value = bookDescriptionState.value,
         onStateChanged = { newValue ->
           bookDescriptionState.value = newValue
-          _addBookState.value = _addBookState.value?.copy(description = newValue)
+          _addBookState.value = _addBookState.value.copy(description = newValue)
         },
         label = stringResource(id = R.string.book_description_hint)
       )
 
-      DropdownMenu(
-        toggle = {
-          Row(verticalAlignment = Alignment.CenterVertically) {
-            TextButton(
-              onClick = { isGenresPickerOpen.value = true },
-              content = { Text(text = stringResource(id = R.string.genre_select)) })
-
-            Text(text = selectedGenreName)
-          }
-        },
-        expanded = isGenresPickerOpen.value,
-        onDismissRequest = {
-          isGenresPickerOpen.value = false
-        },
-        dropdownContent = {
-          for (genre in genres) {
-            DropdownMenuItem(onClick = {
-              _addBookState.value = _addBookState.value?.copy(genreId = genre.id)
-              isGenresPickerOpen.value = false
-            }) {
-              Text(text = genre.name)
-            }
-          }
+      GenrePicker(
+        genres = genres,
+        selectedGenreId = _addBookState.value.genreId,
+        onItemPicked = {
+          _addBookState.value = _addBookState.value.copy(genreId = it.id)
         })
 
       ActionButton(
@@ -173,7 +147,7 @@ class AddBookActivity : AppCompatActivity(), AddBookView {
   }
 
   fun onAddBookTapped() {
-    val bookState = _addBookState.value ?: return
+    val bookState = _addBookState.value
 
     if (bookState.name.isNotEmpty() &&
       bookState.description.isNotEmpty() &&

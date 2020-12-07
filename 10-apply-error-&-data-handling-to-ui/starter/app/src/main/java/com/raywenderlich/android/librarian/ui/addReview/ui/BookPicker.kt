@@ -1,9 +1,9 @@
 package com.raywenderlich.android.librarian.ui.addReview.ui
 
-import androidx.compose.foundation.Text
 import androidx.compose.foundation.layout.Row
 import androidx.compose.material.DropdownMenu
 import androidx.compose.material.DropdownMenuItem
+import androidx.compose.material.Text
 import androidx.compose.material.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
@@ -19,31 +19,31 @@ fun BookPicker(
   selectedBookId: String,
   onItemPicked: (BookAndGenre) -> Unit
 ) {
-  val isBookPickerOpen = remember { mutableStateOf(false) }
-  val selectedBookName = books
-    .firstOrNull { it.book.id == selectedBookId }?.book?.name ?: "None"
+  val isPickerOpen = remember { mutableStateOf(false) }
+  val selectedBookName =
+    books.firstOrNull { it.book.id == selectedBookId }?.book?.name ?: "None"
 
   DropdownMenu(
     toggle = {
       Row(verticalAlignment = Alignment.CenterVertically) {
         TextButton(
-          onClick = { isBookPickerOpen.value = true },
+          onClick = { isPickerOpen.value = true },
           content = { Text(text = stringResource(id = R.string.book_picker_button_text)) })
 
         Text(text = selectedBookName)
       }
     },
-    expanded = isBookPickerOpen.value,
+    expanded = isPickerOpen.value,
     onDismissRequest = {
-      isBookPickerOpen.value = false
+      isPickerOpen.value = false
     },
     dropdownContent = {
-      for (bookAndGenre in books) {
+      for (book in books) {
         DropdownMenuItem(onClick = {
-          onItemPicked(bookAndGenre)
-          isBookPickerOpen.value = false
+          onItemPicked(book)
+          isPickerOpen.value = false
         }) {
-          Text(text = bookAndGenre.book.name)
+          Text(text = book.book.name)
         }
       }
     })

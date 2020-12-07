@@ -131,9 +131,11 @@ class LibrarianRepositoryImpl @Inject constructor(
   override suspend fun getReadingListById(id: String): ReadingListsWithBooks {
     val list = readingListDao.getReadingListById(id)
 
-    return ReadingListsWithBooks(list.id, list.name, list.bookIds.map { bookId -> getBookById(bookId) })
+    return ReadingListsWithBooks(
+      list.id,
+      list.name,
+      list.bookIds.map { bookId -> getBookById(bookId) })
   }
-
 
   override fun getReadingListByIdFlow(id: String): Flow<ReadingListsWithBooks> {
     val readingList = readingListDao.getReadingListByIdFlow(id)

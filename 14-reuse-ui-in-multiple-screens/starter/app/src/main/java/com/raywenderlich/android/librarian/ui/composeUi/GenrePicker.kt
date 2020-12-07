@@ -1,12 +1,8 @@
 package com.raywenderlich.android.librarian.ui.composeUi
 
-import androidx.compose.foundation.Text
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.Button
-import androidx.compose.material.DropdownMenu
-import androidx.compose.material.DropdownMenuItem
-import androidx.compose.material.MaterialTheme
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -31,7 +27,8 @@ fun GenrePicker(
       Row(verticalAlignment = Alignment.CenterVertically) {
         DropdownMenuButton(
           onClick = { isGenresPickerOpen.value = true },
-          text = stringResource(id = R.string.genre_select))
+          text = stringResource(id = R.string.genre_select)
+        )
 
         Text(text = selectedGenreName)
       }

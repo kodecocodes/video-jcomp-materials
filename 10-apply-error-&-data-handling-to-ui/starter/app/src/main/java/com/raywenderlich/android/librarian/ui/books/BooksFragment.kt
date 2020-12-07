@@ -38,7 +38,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.compose.foundation.Icon
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -49,6 +48,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.res.stringResource
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.lifecycleScope
 import com.raywenderlich.android.librarian.R
 import com.raywenderlich.android.librarian.model.Book
@@ -66,7 +66,6 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-
 private const val REQUEST_CODE_ADD_BOOK = 201
 
 @AndroidEntryPoint
@@ -76,18 +75,24 @@ class BooksFragment : Fragment() {
   lateinit var repository: LibrarianRepository
 
   private val _booksState = mutableStateOf(emptyList<BookAndGenre>())
-  private val _genresState = mutableStateOf<List<Genre>>(emptyList())
+  private val _genresState = MutableLiveData<List<Genre>>()
   var filter: Filter? = null
 
   override fun onCreateView(
     inflater: LayoutInflater, container: ViewGroup?,
     savedInstanceState: Bundle?
-  ): View? {
+  ): View {
     return ComposeView(requireContext()).apply {
       setContent {
         BooksContent()
       }
     }
+  }
+
+  override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    super.onViewCreated(view, savedInstanceState)
+    loadGenres()
+    loadBooks()
   }
 
   @Composable
@@ -122,7 +127,7 @@ class BooksFragment : Fragment() {
 
   @Composable
   fun BookFilterModalDrawer(bookFilterDrawerState: BottomDrawerState) {
-    val books = _booksState.value ?: emptyList()
+    val books = _booksState.value
 
     BottomDrawerLayout(
       drawerContent = { BookFilterModalDrawerContent(bookFilterDrawerState) },
@@ -144,20 +149,14 @@ class BooksFragment : Fragment() {
   @Composable
   fun AddNewBook(bookFilterDrawerState: BottomDrawerState) {
     FloatingActionButton(
-      icon = { Icon(Icons.Filled.Add) },
+      content = { Icon(Icons.Filled.Add) },
       onClick = {
         bookFilterDrawerState.close { showAddBook() }
       },
     )
   }
 
-  override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-    super.onViewCreated(view, savedInstanceState)
-    loadGenres()
-    loadBooks()
-  }
-
-  fun loadGenres() {
+  private fun loadGenres() {
     lifecycleScope.launch {
       val genres = repository.getGenres()
 

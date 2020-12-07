@@ -39,13 +39,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.compose.animation.animate
-import androidx.compose.foundation.Icon
-import androidx.compose.foundation.layout.ColumnScope.align
-import androidx.compose.foundation.layout.RowScope.align
-import androidx.compose.foundation.layout.Stack
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.FloatingActionButton
+import androidx.compose.material.Icon
 import androidx.compose.material.Scaffold
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -78,7 +77,7 @@ class ReadingListFragment : Fragment() {
     inflater: LayoutInflater,
     container: ViewGroup?,
     savedInstanceState: Bundle?
-  ): View? {
+  ): View {
     return ComposeView(requireContext()).apply {
       setContent {
         LibrarianTheme {
@@ -106,12 +105,14 @@ class ReadingListFragment : Fragment() {
 
     val isShowingAddList by readingListViewModel.isShowingAddReadingListState.observeAsState(false)
 
-    Stack(
-      modifier = Modifier
-        .fillMaxSize()
-        .align(Alignment.CenterVertically)
-        .align(Alignment.CenterHorizontally)
+    Box(
+      modifier = with(BoxScope) {
+        Modifier
+          .fillMaxSize()
+          .align(Alignment.Center)
+      }
     ) {
+
       ReadingLists(
         readingLists = readingListsState,
         onItemClick = { readingList -> onItemSelected(readingList) },
@@ -142,13 +143,15 @@ class ReadingListFragment : Fragment() {
 
   @Composable
   fun AddReadingListButton() {
-    val isShowingAddReadingList by readingListViewModel.isShowingAddReadingListState.observeAsState(false)
+    val isShowingAddReadingList by readingListViewModel.isShowingAddReadingListState.observeAsState(
+      false
+    )
     val size = animate(target = if (isShowingAddReadingList) 0.dp else 56.dp)
 
     FloatingActionButton(modifier = Modifier.size(size),
       onClick = { readingListViewModel.onAddReadingListTapped() }
     ) {
-      Icon(asset = Icons.Default.Add)
+      Icon(imageVector = Icons.Default.Add)
     }
   }
 

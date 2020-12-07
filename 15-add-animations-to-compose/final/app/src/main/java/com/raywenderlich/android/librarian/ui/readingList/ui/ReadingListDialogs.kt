@@ -1,11 +1,12 @@
 package com.raywenderlich.android.librarian.ui.readingList.ui
 
-import androidx.compose.foundation.Text
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -22,8 +23,8 @@ import com.raywenderlich.android.librarian.ui.composeUi.InputField
 
 @Composable
 fun AddReadingList(
-  onAddList: (String) -> Unit = {},
-  onDismiss: () -> Unit = {}
+  onAddList: (String) -> Unit,
+  onDismiss: () -> Unit
 ) {
   val inputState = remember { mutableStateOf("") }
 
@@ -31,14 +32,14 @@ fun AddReadingList(
     val shape = RoundedCornerShape(16.dp)
 
     Column(
-      modifier = Modifier.background(
-        MaterialTheme.colors.surface,
-        shape = shape
-      ).border(width = 1.dp, color = MaterialTheme.colors.primary, shape = shape),
+      modifier = Modifier
+        .background(
+          MaterialTheme.colors.surface, shape = shape
+        )
+        .border(BorderStroke(1.dp, color = MaterialTheme.colors.primary), shape = shape),
       verticalArrangement = Arrangement.Center,
       horizontalAlignment = Alignment.CenterHorizontally
     ) {
-
       Spacer(modifier = Modifier.height(16.dp))
 
       Text(
@@ -59,7 +60,7 @@ fun AddReadingList(
         modifier = Modifier.fillMaxWidth(),
         text = stringResource(id = R.string.add_reading_list_button_text),
         isEnabled = inputState.value.isNotEmpty(),
-        onClick = { onAddList(inputState.value) },
+        onClick = { onAddList(inputState.value) }
       )
     }
   }

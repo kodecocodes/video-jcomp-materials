@@ -1,11 +1,11 @@
 package com.raywenderlich.android.librarian.ui.composeUi
 
-import androidx.compose.foundation.Icon
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.ColumnScope.align
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyRowFor
+import androidx.compose.material.Icon
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.runtime.Composable
@@ -30,7 +30,7 @@ fun RatingBar(
   val selectedRating = remember { mutableStateOf(currentRating) }
 
   LazyRowFor(items = range.toList(),
-    modifier = Modifier.align(Alignment.CenterHorizontally)) { index ->
+    modifier = with(ColumnScope) { Modifier.align(Alignment.CenterHorizontally) }) { index ->
     RatingItem(
       isSelected = index <= selectedRating.value,
       isSelectable = isSelectable,
@@ -62,7 +62,7 @@ fun RatingItem(
   }
 
   Icon(
-    asset = if (isSelected)
+    imageVector = if (isSelected)
       Icons.Default.Star
     else
       vectorResource(id = R.drawable.ic_baseline_star_outline_24),

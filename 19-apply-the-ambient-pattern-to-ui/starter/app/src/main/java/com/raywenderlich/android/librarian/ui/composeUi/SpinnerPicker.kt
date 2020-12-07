@@ -1,11 +1,7 @@
 package com.raywenderlich.android.librarian.ui.composeUi
 
-import androidx.compose.foundation.Text
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Button
-import androidx.compose.material.DropdownMenu
-import androidx.compose.material.DropdownMenuItem
-import androidx.compose.material.MaterialTheme
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -28,20 +24,24 @@ fun <T> SpinnerPicker(
     mutableStateOf(preselectedItem?.let(itemToName) ?: "None")
   }
 
-  Row(modifier = Modifier
-    .wrapContentWidth()
-    .padding(start = 16.dp, end = 16.dp),
-    verticalAlignment = Alignment.CenterVertically) {
-    DropdownMenu(toggle = {
-      DropdownMenuButton(text = pickerText, onClick = {
-        isPickerExpanded.value = true
-      })
-    },
+  Row(
+    modifier = Modifier
+      .wrapContentWidth()
+      .padding(start = 16.dp, end = 16.dp),
+    verticalAlignment = Alignment.CenterVertically
+  ) {
+    DropdownMenu(
+      toggle = {
+        DropdownMenuButton(text = pickerText, onClick = {
+          isPickerExpanded.value = true
+        })
+      },
       expanded = isPickerExpanded.value,
       onDismissRequest = { isPickerExpanded.value = false },
       dropdownModifier = Modifier
         .height(300.dp)
-        .width(200.dp)) {
+        .width(200.dp)
+    ) {
 
       for (item in items) {
         DropdownMenuItem(onClick = {
@@ -56,7 +56,8 @@ fun <T> SpinnerPicker(
 
     Text(
       text = stringResource(id = R.string.current_selection, pickedItem.value),
-      color = MaterialTheme.colors.onPrimary)
+      color = MaterialTheme.colors.onPrimary
+    )
   }
 }
 

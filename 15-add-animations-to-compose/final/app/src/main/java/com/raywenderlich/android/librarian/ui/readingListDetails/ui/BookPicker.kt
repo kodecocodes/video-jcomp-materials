@@ -1,16 +1,11 @@
 package com.raywenderlich.android.librarian.ui.readingListDetails.ui
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.Text
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.ColumnScope.align
-import androidx.compose.foundation.layout.ColumnScope.gravity
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumnFor
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.RadioButton
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -59,9 +54,11 @@ fun BookPicker(
   } else {
     Text(
       text = stringResource(id = R.string.no_books_to_add_to_reading_list),
-      modifier = Modifier
-        .align(Alignment.CenterHorizontally)
-        .padding(16.dp),
+      modifier = with(ColumnScope) {
+        Modifier
+          .align(Alignment.CenterHorizontally)
+          .padding(16.dp)
+      },
       fontSize = 16.sp,
       fontWeight = FontWeight.SemiBold,
       textAlign = TextAlign.Center,
@@ -70,13 +67,15 @@ fun BookPicker(
 
     ActionButton(
       enabledColor = colorResource(id = R.color.orange_200),
-      modifier = Modifier
-        .align(Alignment.CenterHorizontally)
-        .fillMaxWidth(0.5f),
+      modifier = with(ColumnScope) {
+        Modifier
+          .align(Alignment.CenterHorizontally)
+          .fillMaxWidth(0.5f)
+      },
       text = stringResource(id = R.string.cancel),
       onClick = { onDismiss() })
 
-    Image(asset = imageResource(id = R.drawable.box_of_books))
+    Image(bitmap = imageResource(id = R.drawable.box_of_books))
   }
 }
 

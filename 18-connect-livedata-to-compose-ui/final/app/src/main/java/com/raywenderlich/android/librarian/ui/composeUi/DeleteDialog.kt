@@ -1,10 +1,10 @@
 package com.raywenderlich.android.librarian.ui.composeUi
 
-import androidx.compose.foundation.Text
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.AlertDialog
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -18,9 +18,9 @@ fun <T> DeleteDialog(
   onDismiss: () -> Unit
 ) {
   AlertDialog(
+    onDismissRequest = onDismiss,
     title = { Text(text = stringResource(id = R.string.delete_title)) },
     text = { Text(text = message) },
-    onDismissRequest = onDismiss,
     buttons = {
       Row(
         modifier = Modifier.fillMaxWidth(),
@@ -28,10 +28,12 @@ fun <T> DeleteDialog(
       ) {
         DialogButton(
           text = R.string.yes,
-          onClickAction = { onDeleteItem(item) }
-        )
+          onClickAction = { onDeleteItem(item) })
 
-        DialogButton(text = R.string.cancel, onClickAction = onDismiss)
+        DialogButton(
+          text = R.string.cancel,
+          onClickAction = { onDismiss() })
       }
-    })
+    },
+  )
 }

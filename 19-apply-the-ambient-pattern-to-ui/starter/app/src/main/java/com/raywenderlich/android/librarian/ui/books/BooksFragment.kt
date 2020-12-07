@@ -38,10 +38,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.compose.foundation.Icon
-import androidx.compose.foundation.layout.ColumnScope.align
-import androidx.compose.foundation.layout.RowScope.align
-import androidx.compose.foundation.layout.Stack
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -65,6 +63,7 @@ import com.raywenderlich.android.librarian.ui.composeUi.TopBar
 import com.raywenderlich.android.librarian.utils.toast
 import dagger.hilt.android.AndroidEntryPoint
 
+
 private const val REQUEST_CODE_ADD_BOOK = 201
 
 @AndroidEntryPoint
@@ -75,7 +74,7 @@ class BooksFragment : Fragment() {
   override fun onCreateView(
     inflater: LayoutInflater, container: ViewGroup?,
     savedInstanceState: Bundle?
-  ): View? {
+  ): View {
     return ComposeView(requireContext()).apply {
       setContent {
         LibrarianTheme {
@@ -133,11 +132,13 @@ class BooksFragment : Fragment() {
       drawerState = bookFilterDrawerState,
       bodyContent = {
 
-        Stack(modifier = Modifier
-          .align(Alignment.CenterHorizontally)
-          .align(Alignment.CenterVertically)
-          .fillMaxSize()) {
-          BooksList(books, onItemLongTap = { booksViewModel.showDeleteBook(it) })
+        Box(modifier = with(BoxScope) {
+          Modifier
+            .align(Alignment.Center)
+            .fillMaxSize()
+        }) {
+          BooksList(books, onLongItemTap = { booksViewModel.showDeleteBook(it) })
+
 
           if (bookToDelete != null) {
             DeleteDialog(
@@ -147,9 +148,7 @@ class BooksFragment : Fragment() {
                 booksViewModel.removeBook(it.book)
                 booksViewModel.cancelDeleteBook()
               },
-              onDismiss = {
-                booksViewModel.cancelDeleteBook()
-              }
+              onDismiss = { booksViewModel.cancelDeleteBook() }
             )
           }
         }
@@ -173,7 +172,7 @@ class BooksFragment : Fragment() {
   @Composable
   fun AddNewBook(bookFilterDrawerState: BottomDrawerState) {
     FloatingActionButton(
-      icon = { Icon(Icons.Filled.Add) },
+      content = { Icon(Icons.Filled.Add) },
       onClick = {
         bookFilterDrawerState.close { showAddBook() }
       },

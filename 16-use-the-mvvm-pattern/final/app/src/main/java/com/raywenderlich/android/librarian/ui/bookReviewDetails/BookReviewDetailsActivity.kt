@@ -41,24 +41,18 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.animation.core.TransitionState
 import androidx.compose.animation.transition
-import androidx.compose.foundation.Icon
 import androidx.compose.foundation.ScrollableColumn
-import androidx.compose.foundation.Text
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.layout.ColumnScope.align
-import androidx.compose.foundation.layout.RowScope.align
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Card
-import androidx.compose.material.FloatingActionButton
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Scaffold
+import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.drawOpacity
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
@@ -138,7 +132,8 @@ class BookReviewDetailsActivity : AppCompatActivity() {
     val state = transition(
       definition = transitionDefinition,
       toState = true,
-      initState = _isFirstLoadFinished.value)
+      initState = _isFirstLoadFinished.value
+    )
 
     Scaffold(topBar = { BookReviewDetailsTopBar() },
       floatingActionButton = { AddReadingEntry(state) }) {
@@ -160,7 +155,7 @@ class BookReviewDetailsActivity : AppCompatActivity() {
     FloatingActionButton(
       modifier = Modifier.size(state[floatingButtonSize]),
       onClick = { _isShowingAddEntryState.value = true }) {
-      Icon(asset = Icons.Default.Add)
+      Icon(imageVector = Icons.Default.Add)
     }
   }
 
@@ -169,10 +164,11 @@ class BookReviewDetailsActivity : AppCompatActivity() {
     val bookReview = _bookReviewDetailsState.value
     val genre = _genreState.value
 
-    Stack(
-      modifier = Modifier.fillMaxSize()
-        .align(Alignment.CenterVertically)
-        .align(Alignment.CenterHorizontally)
+    Box(
+      modifier = with(BoxScope) {
+        Modifier.fillMaxSize()
+          .align(Alignment.Center)
+      }
     ) {
       ScrollableColumn(
         modifier = Modifier.fillMaxSize(),
@@ -200,7 +196,7 @@ class BookReviewDetailsActivity : AppCompatActivity() {
           fontWeight = FontWeight.Bold,
           fontSize = 18.sp,
           color = MaterialTheme.colors.onPrimary,
-          modifier = Modifier.drawOpacity(state[contentAlpha])
+          modifier = Modifier.alpha(state[contentAlpha])
         )
 
         Spacer(modifier = Modifier.height(state[contentMarginTop]))
@@ -209,7 +205,7 @@ class BookReviewDetailsActivity : AppCompatActivity() {
           text = genre.name,
           fontSize = 12.sp,
           color = MaterialTheme.colors.onPrimary,
-          modifier = Modifier.drawOpacity(state[contentAlpha])
+          modifier = Modifier.alpha(state[contentAlpha])
         )
 
         Spacer(modifier = Modifier.height(state[contentMarginTop]))
@@ -230,7 +226,7 @@ class BookReviewDetailsActivity : AppCompatActivity() {
           ),
           fontSize = 12.sp,
           color = MaterialTheme.colors.onPrimary,
-          modifier = Modifier.drawOpacity(state[contentAlpha])
+          modifier = Modifier.alpha(state[contentAlpha])
         )
 
         Spacer(modifier = Modifier.height(8.dp))
@@ -248,7 +244,7 @@ class BookReviewDetailsActivity : AppCompatActivity() {
         Text(
           modifier = Modifier
             .padding(start = 20.dp, end = 20.dp, top = 8.dp, bottom = 8.dp)
-            .drawOpacity(state[contentAlpha]),
+            .alpha(state[contentAlpha]),
           text = bookReview.review.notes,
           fontSize = 12.sp,
           fontStyle = FontStyle.Italic,

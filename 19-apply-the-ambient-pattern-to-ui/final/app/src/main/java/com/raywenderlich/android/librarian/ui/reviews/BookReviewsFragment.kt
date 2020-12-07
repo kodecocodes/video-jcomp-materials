@@ -38,12 +38,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.compose.foundation.Icon
-import androidx.compose.foundation.layout.ColumnScope.align
-import androidx.compose.foundation.layout.RowScope.align
-import androidx.compose.foundation.layout.Stack
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.FloatingActionButton
+import androidx.compose.material.Icon
 import androidx.compose.material.Scaffold
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -80,7 +79,7 @@ class BookReviewsFragment : Fragment() {
   override fun onCreateView(
     inflater: LayoutInflater, container: ViewGroup?,
     savedInstanceState: Bundle?
-  ): View? {
+  ): View {
     return ComposeView(requireContext()).apply {
       setContent {
         LibrarianTheme {
@@ -108,7 +107,7 @@ class BookReviewsFragment : Fragment() {
   @Composable
   fun AddBookReview() {
     FloatingActionButton(onClick = { startAddBookReview() }) {
-      Icon(asset = Icons.Default.Add)
+      Icon(imageVector = Icons.Default.Add)
     }
   }
 
@@ -119,27 +118,29 @@ class BookReviewsFragment : Fragment() {
 
     val reviewToDelete = deleteReviewState
 
-    Stack(
-      modifier = Modifier
-        .align(Alignment.CenterHorizontally)
-        .align(Alignment.CenterVertically)
-        .fillMaxSize()
+    Box(
+      modifier = with(BoxScope) {
+        Modifier
+          .align(Alignment.Center)
+          .fillMaxSize()
+      }
     ) {
       BookReviewsList(bookReviews,
         onItemClick = ::onItemSelected,
-        onItemLongTap = { bookReview -> bookReviewsViewModel.onItemLongTapped(bookReview) })
+        onLongItemTap = { bookReview -> bookReviewsViewModel.onItemLongTapped(bookReview) })
 
       if (reviewToDelete != null) {
         DeleteDialog(
           item = reviewToDelete,
-          message = stringResource(id = R.string.delete_review_message, reviewToDelete.book.name),
+          message = stringResource(
+            id =
+            R.string.delete_review_message, reviewToDelete.book.name
+          ),
           onDeleteItem = { bookReview ->
             bookReviewsViewModel.deleteReview(bookReview)
             bookReviewsViewModel.onDialogDismissed()
           },
-          onDismiss = {
-            bookReviewsViewModel.onDialogDismissed()
-          }
+          onDismiss = { bookReviewsViewModel.onDialogDismissed() }
         )
       }
     }
