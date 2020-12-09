@@ -48,7 +48,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.res.stringResource
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.lifecycleScope
 import com.raywenderlich.android.librarian.R
 import com.raywenderlich.android.librarian.model.Book
@@ -66,6 +65,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+
 private const val REQUEST_CODE_ADD_BOOK = 201
 
 @AndroidEntryPoint
@@ -75,7 +75,7 @@ class BooksFragment : Fragment() {
   lateinit var repository: LibrarianRepository
 
   private val _booksState = mutableStateOf(emptyList<BookAndGenre>())
-  private val _genresState = MutableLiveData<List<Genre>>()
+  private val _genresState = mutableStateOf<List<Genre>>(emptyList())
   var filter: Filter? = null
 
   override fun onCreateView(
@@ -87,12 +87,6 @@ class BooksFragment : Fragment() {
         BooksContent()
       }
     }
-  }
-
-  override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-    super.onViewCreated(view, savedInstanceState)
-    loadGenres()
-    loadBooks()
   }
 
   @Composable
@@ -109,7 +103,7 @@ class BooksFragment : Fragment() {
   fun BooksTopBar(bookFilterDrawerState: BottomDrawerState) {
     TopBar(
       title = stringResource(id = R.string.my_books_title),
-      actions = { FilterButton(bookFilterDrawerState) })
+      content = { FilterButton(bookFilterDrawerState) })
   }
 
   @Composable
@@ -137,7 +131,7 @@ class BooksFragment : Fragment() {
 
   @Composable
   fun BookFilterModalDrawerContent(bookFilterDrawerState: BottomDrawerState) {
-    val genres = _genresState.value ?: emptyList()
+    val genres = _genresState.value
 
     BookFilter(filter, genres, onFilterSelected = {
       bookFilterDrawerState.close()
@@ -154,6 +148,12 @@ class BooksFragment : Fragment() {
         bookFilterDrawerState.close { showAddBook() }
       },
     )
+  }
+
+  override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    super.onViewCreated(view, savedInstanceState)
+    loadGenres()
+    loadBooks()
   }
 
   private fun loadGenres() {

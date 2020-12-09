@@ -37,6 +37,7 @@ package com.raywenderlich.android.librarian.ui.addBook
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -68,6 +69,8 @@ class AddBookActivity : AppCompatActivity(), AddBookView {
 
   @Inject
   lateinit var repository: LibrarianRepository
+
+  private val addBookViewModel by viewModels<AddBookViewModel>()
 
   companion object {
     fun getIntent(context: Context): Intent = Intent(context, AddBookActivity::class.java)

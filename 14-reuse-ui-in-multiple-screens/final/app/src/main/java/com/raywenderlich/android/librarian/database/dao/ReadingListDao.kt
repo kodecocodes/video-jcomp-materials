@@ -60,5 +60,8 @@ interface ReadingListDao {
   suspend fun removeReadingLists(readingLists: List<ReadingList>)
 
   @Query("SELECT * FROM readinglist WHERE id = :id")
-  fun getReadingListById(id: String): Flow<ReadingList>
+  suspend fun getReadingListById(id: String): ReadingList
+
+  @Query("SELECT * FROM readinglist WHERE id = :id")
+  fun getReadingListByIdFlow(id: String): Flow<ReadingList>
 }

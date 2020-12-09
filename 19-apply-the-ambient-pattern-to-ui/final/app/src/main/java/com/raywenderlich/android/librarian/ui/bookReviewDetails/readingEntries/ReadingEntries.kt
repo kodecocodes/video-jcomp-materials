@@ -3,12 +3,13 @@ package com.raywenderlich.android.librarian.ui.bookReviewDetails.readingEntries
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumnFor
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.unit.dp
@@ -19,13 +20,22 @@ import com.raywenderlich.android.librarian.utils.formatDateToText
 @Composable
 fun ReadingEntries(
   readingEntries: List<ReadingEntry>,
-  onItemLongClick: (ReadingEntry) -> Unit
+  onItemLongClick: (ReadingEntry) -> Unit,
+  content: @Composable () -> Unit
 ) {
-  LazyColumnFor(
-    items = readingEntries,
-    modifier = Modifier.padding(top = 16.dp, bottom = 96.dp),
-  ) { entry ->
-    ReadingEntryItem(entry, onItemLongClick)
+  LazyColumn(
+    modifier = with(ColumnScope) {
+      Modifier.padding(top = 16.dp)
+        .align(Alignment.CenterHorizontally)
+    },
+  ) {
+    item { content() }
+
+    items(items = readingEntries) { entry ->
+      ReadingEntryItem(entry, onItemLongClick)
+    }
+
+    item { Spacer(modifier = Modifier.height(96.dp)) }
   }
 }
 

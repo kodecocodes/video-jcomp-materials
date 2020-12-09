@@ -29,7 +29,10 @@ fun ActionButton(
   TextButton(
     shape = RoundedCornerShape(16.dp),
     enabled = isEnabled,
-    colors = defaultButtonColors(backgroundColor, contentColor),
+    colors = defaultButtonColors(
+      backgroundColor = backgroundColor,
+      contentColor = contentColor
+    ),
     modifier = modifier
       .padding(16.dp),
     content = { Text(text = text) },

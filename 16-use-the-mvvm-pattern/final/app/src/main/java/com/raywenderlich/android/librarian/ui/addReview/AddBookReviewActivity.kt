@@ -54,17 +54,13 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.lifecycleScope
 import com.raywenderlich.android.librarian.R
-import com.raywenderlich.android.librarian.model.Review
 import com.raywenderlich.android.librarian.model.relations.BookAndGenre
 import com.raywenderlich.android.librarian.model.state.AddBookReviewState
 import com.raywenderlich.android.librarian.repository.LibrarianRepository
 import com.raywenderlich.android.librarian.ui.composeUi.*
 import com.raywenderlich.android.librarian.utils.EMPTY_BOOK_AND_GENRE
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
-import java.util.*
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -83,17 +79,12 @@ class AddBookReviewActivity : AppCompatActivity(), AddReviewView {
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
+    addBookReviewViewModel.setView(this)
+
     setContent {
       LibrarianTheme {
         AddBookReviewContent()
       }
-    }
-    loadBooks()
-  }
-
-  private fun loadBooks() {
-    lifecycleScope.launch {
-      _books.value = repository.getBooks()
     }
   }
 
@@ -138,8 +129,10 @@ class AddBookReviewActivity : AppCompatActivity(), AddReviewView {
         items = _books.value,
         preselectedItem = currentlySelectedBook.value,
         itemToName = { it.book.name },
-        onItemPicked = {
-          _bookReviewState.value = _bookReviewState.value.copy(bookAndGenre = it)
+        onItemPicked = { bookAndGenre ->
+          _bookReviewState.value = _bookReviewState.value.copy(bookAndGenre = bookAndGenre)
+          currentlySelectedBook.value = bookAndGenre
+          addBookReviewViewModel.onBookPicked(bookAndGenre)
         },
         pickerText = stringResource(id = R.string.book_picker_button_text),
       )
@@ -152,6 +145,7 @@ class AddBookReviewActivity : AppCompatActivity(), AddReviewView {
         onStateChanged = { url ->
           _bookReviewState.value = _bookReviewState.value.copy(bookImageUrl = url)
           bookUrl.value = url
+          addBookReviewViewModel.onImageUrlChanged(url)
         },
         isInputValid = bookUrl.value.isNotEmpty()
       )
@@ -163,7 +157,7 @@ class AddBookReviewActivity : AppCompatActivity(), AddReviewView {
         isLargeRating = true,
         onRatingChanged = { newRating ->
           currentRatingFilter.value = newRating
-          _bookReviewState.value = _bookReviewState.value.copy(rating = newRating)
+          addBookReviewViewModel.onRatingSelected(newRating)
         })
 
       Spacer(modifier = Modifier.height(16.dp))
@@ -174,6 +168,7 @@ class AddBookReviewActivity : AppCompatActivity(), AddReviewView {
         onStateChanged = { notes ->
           _bookReviewState.value = _bookReviewState.value.copy(notes = notes)
           bookNotes.value = notes
+          addBookReviewViewModel.onNotesChanged(notes)
         },
         isInputValid = bookNotes.value.isNotEmpty()
       )
@@ -185,36 +180,11 @@ class AddBookReviewActivity : AppCompatActivity(), AddReviewView {
       ActionButton(
         modifier = Modifier.fillMaxWidth(0.7f),
         text = stringResource(id = R.string.add_book_review_text),
-        onClick = ::addBookReview,
+        onClick = addBookReviewViewModel::addBookReview,
         isEnabled = bookNotes.value.isNotEmpty() && bookUrl.value.isNotEmpty() && pickedBook != EMPTY_BOOK_AND_GENRE
       )
 
       Spacer(modifier = Modifier.height(16.dp))
-    }
-  }
-
-  fun addBookReview() {
-    val state = _bookReviewState.value
-
-    lifecycleScope.launch {
-      val bookId = state.bookAndGenre.book.id
-      val imageUrl = state.bookImageUrl
-      val notes = state.notes
-      val rating = state.rating
-
-      if (bookId.isNotEmpty() && imageUrl.isNotBlank() && notes.isNotBlank()) {
-        val bookReview = Review(
-          bookId = bookId,
-          rating = rating,
-          notes = notes,
-          imageUrl = imageUrl,
-          lastUpdatedDate = Date(),
-          entries = emptyList()
-        )
-        repository.addReview(bookReview)
-
-        onReviewAdded()
-      }
     }
   }
 

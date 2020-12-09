@@ -49,19 +49,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.res.stringResource
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
 import com.raywenderlich.android.librarian.R
-import com.raywenderlich.android.librarian.model.Book
 import com.raywenderlich.android.librarian.model.Genre
 import com.raywenderlich.android.librarian.model.relations.BookAndGenre
 import com.raywenderlich.android.librarian.repository.LibrarianRepository
-import com.raywenderlich.android.librarian.ui.books.filter.ByGenre
-import com.raywenderlich.android.librarian.ui.books.filter.ByRating
 import com.raywenderlich.android.librarian.ui.books.filter.Filter
 import com.raywenderlich.android.librarian.ui.books.ui.BookFilter
 import com.raywenderlich.android.librarian.ui.books.ui.BooksList
@@ -70,7 +65,6 @@ import com.raywenderlich.android.librarian.ui.composeUi.LibrarianTheme
 import com.raywenderlich.android.librarian.ui.composeUi.TopBar
 import com.raywenderlich.android.librarian.utils.toast
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 
@@ -115,7 +109,7 @@ class BooksFragment : Fragment() {
   fun BooksTopBar(bookFilterDrawerState: BottomDrawerState) {
     TopBar(
       title = stringResource(id = R.string.my_books_title),
-      actions = { FilterButton(bookFilterDrawerState) })
+      content = { FilterButton(bookFilterDrawerState) })
   }
 
   @Composable
@@ -127,7 +121,7 @@ class BooksFragment : Fragment() {
         bookFilterDrawerState.expand()
       }
     }) {
-      Icon(Icons.Default.Edit, tint = Color.White)
+      Icon(Icons.Default.Edit, tint = MaterialTheme.colors.onSecondary)
     }
   }
 
@@ -145,19 +139,20 @@ class BooksFragment : Fragment() {
             .align(Alignment.Center)
             .fillMaxSize()
         }) {
+          BooksList(books, onLongItemTap = { _deleteBookState.value = it })
           val bookToDelete = _deleteBookState.value
 
           if (bookToDelete != null) {
-            DeleteDialog(item = bookToDelete,
+            DeleteDialog(
+              item = bookToDelete,
               message = stringResource(id = R.string.delete_message, bookToDelete.book.name),
               onDeleteItem = {
-                removeBook(it.book)
-                _deleteBookState.value = null
+                booksViewModel.removeBook(it.book)
+                booksViewModel.cancelDeleteBook()
               },
-              onDismiss = { _deleteBookState.value = null })
+              onDismiss = { booksViewModel.cancelDeleteBook() }
+            )
           }
-
-          BooksList(books, onLongItemTap = { _deleteBookState.value = it })
         }
       })
   }
@@ -169,7 +164,7 @@ class BooksFragment : Fragment() {
     BookFilter(filter, genres, onFilterSelected = {
       bookFilterDrawerState.close()
       this.filter = it
-      loadBooks()
+      booksViewModel.loadBooks()
     })
   }
 
@@ -183,44 +178,10 @@ class BooksFragment : Fragment() {
     )
   }
 
-  override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-    super.onViewCreated(view, savedInstanceState)
-    loadGenres()
-    loadBooks()
-  }
-
-  private fun loadGenres() {
-    lifecycleScope.launch {
-      val genres = repository.getGenres()
-
-      _genresState.value = genres
-    }
-  }
-
-  fun loadBooks() {
-    lifecycleScope.launch {
-
-      val books = when (val currentFilter = filter) {
-        is ByGenre -> repository.getBooksByGenre(currentFilter.genreId)
-        is ByRating -> repository.getBooksByRating(currentFilter.rating)
-        else -> repository.getBooks()
-      }
-
-      _booksState.value = books
-    }
-  }
-
-  fun removeBook(book: Book) {
-    lifecycleScope.launch {
-      repository.removeBook(book)
-      loadBooks()
-    }
-  }
-
   private fun showAddBook() {
     val addBook = registerForActivityResult(AddBookContract()) { isBookCreated ->
       if (isBookCreated) {
-        loadBooks()
+        booksViewModel.loadBooks()
         activity?.toast("Book added!")
       }
     }

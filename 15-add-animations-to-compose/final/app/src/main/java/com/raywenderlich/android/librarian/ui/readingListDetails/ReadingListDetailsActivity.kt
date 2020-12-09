@@ -37,6 +37,7 @@ package com.raywenderlich.android.librarian.ui.readingListDetails
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
@@ -71,6 +72,7 @@ class ReadingListDetailsActivity : AppCompatActivity() {
 
   @Inject
   lateinit var repository: LibrarianRepository
+  private val readingListDetailsViewModel by viewModels<ReadingListDetailsViewModel>()
 
   private val _addBookState = mutableStateOf<List<BookItem>>(emptyList())
   private val readingListState = mutableStateOf<ReadingListsWithBooks?>(null)

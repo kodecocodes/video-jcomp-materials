@@ -19,31 +19,31 @@ fun BookPicker(
   selectedBookId: String,
   onItemPicked: (BookAndGenre) -> Unit
 ) {
-  val isPickerOpen = remember { mutableStateOf(false) }
-  val selectedBookName =
-    books.firstOrNull { it.book.id == selectedBookId }?.book?.name ?: "None"
+  val isBookPickerOpen = remember { mutableStateOf(false) }
+  val selectedBookName = books
+    .firstOrNull { it.book.id == selectedBookId }?.book?.name ?: "None"
 
   DropdownMenu(
     toggle = {
       Row(verticalAlignment = Alignment.CenterVertically) {
         TextButton(
-          onClick = { isPickerOpen.value = true },
+          onClick = { isBookPickerOpen.value = true },
           content = { Text(text = stringResource(id = R.string.book_picker_button_text)) })
 
         Text(text = selectedBookName)
       }
     },
-    expanded = isPickerOpen.value,
+    expanded = isBookPickerOpen.value,
     onDismissRequest = {
-      isPickerOpen.value = false
+      isBookPickerOpen.value = false
     },
     dropdownContent = {
-      for (book in books) {
+      for (bookAndGenre in books) {
         DropdownMenuItem(onClick = {
-          onItemPicked(book)
-          isPickerOpen.value = false
+          onItemPicked(bookAndGenre)
+          isBookPickerOpen.value = false
         }) {
-          Text(text = book.book.name)
+          Text(text = bookAndGenre.book.name)
         }
       }
     })

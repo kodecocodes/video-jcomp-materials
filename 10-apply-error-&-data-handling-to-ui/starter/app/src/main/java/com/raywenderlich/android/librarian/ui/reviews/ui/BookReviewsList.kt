@@ -1,4 +1,4 @@
-package com.rayfoundationwenderlich.android.librarian.ui.reviews.ui
+package com.raywenderlich.android.librarian.ui.reviews.ui
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
@@ -27,8 +27,9 @@ fun BookReviewsList(
   bookReviews: List<BookReview>,
   onItemClick: (BookReview) -> Unit
 ) {
+
   LazyColumnFor(items = bookReviews) { bookReview ->
-    BookReviewItem(bookReview = bookReview, onItemClick)
+    BookReviewItem(bookReview, onItemClick)
   }
 }
 
@@ -37,6 +38,7 @@ fun BookReviewItem(
   bookReview: BookReview,
   onItemClick: (BookReview) -> Unit
 ) {
+
   Card(
     elevation = 8.dp,
     border = BorderStroke(1.dp, MaterialTheme.colors.primary),
@@ -44,13 +46,10 @@ fun BookReviewItem(
     modifier = Modifier
       .wrapContentHeight()
       .padding(16.dp)
-      .clickable(
-        onClick = { onItemClick(bookReview) },
-        indication = null
-      )
+      .clickable(onClick = { onItemClick(bookReview) }, indication = null)
   ) {
     Row(modifier = Modifier.fillMaxSize()) {
-      Spacer(modifier = Modifier.width(16.dp))
+      Spacer(modifier = Modifier.size(16.dp))
 
       Column(
         modifier = Modifier
@@ -69,9 +68,7 @@ fun BookReviewItem(
         Spacer(modifier = Modifier.height(8.dp))
 
         Row {
-          Text(
-            text = stringResource(id = R.string.rating_text)
-          )
+          Text(text = stringResource(id = R.string.rating_text))
 
           RatingBar(
             range = 1..5,
@@ -82,7 +79,8 @@ fun BookReviewItem(
         }
 
         Text(
-          text = stringResource(
+          text =
+          stringResource(
             id = R.string.number_of_reading_entries,
             bookReview.review.entries.size
           )

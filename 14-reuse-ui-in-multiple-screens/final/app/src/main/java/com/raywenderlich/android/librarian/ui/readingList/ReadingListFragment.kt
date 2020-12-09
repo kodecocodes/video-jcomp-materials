@@ -58,6 +58,7 @@ import com.raywenderlich.android.librarian.R
 import com.raywenderlich.android.librarian.model.ReadingList
 import com.raywenderlich.android.librarian.model.relations.ReadingListsWithBooks
 import com.raywenderlich.android.librarian.repository.LibrarianRepository
+import com.raywenderlich.android.librarian.ui.composeUi.DeleteDialog
 import com.raywenderlich.android.librarian.ui.composeUi.LibrarianTheme
 import com.raywenderlich.android.librarian.ui.composeUi.TopBar
 import com.raywenderlich.android.librarian.ui.readingList.ui.AddReadingList
@@ -75,6 +76,7 @@ class ReadingListFragment : Fragment() {
 
   val readingListsState = mutableStateOf(emptyList<ReadingListsWithBooks>())
   private val _isShowingAddReadingListState = mutableStateOf(false)
+  private val _deleteListState = mutableStateOf<ReadingListsWithBooks?>(null)
 
   override fun onCreateView(
     inflater: LayoutInflater,
@@ -120,8 +122,8 @@ class ReadingListFragment : Fragment() {
     ) {
       ReadingLists(
         readingLists = readingListsState.value,
-        onItemClick = { readingList -> onItemSelected(readingList) }
-      )
+        onItemClick = { readingList -> onItemSelected(readingList) },
+        onLongItemTap = { _deleteListState.value = it })
 
       val isShowingAddList = _isShowingAddReadingListState.value
 
@@ -133,6 +135,20 @@ class ReadingListFragment : Fragment() {
           onDismiss = {
             _isShowingAddReadingListState.value = false
           }
+        )
+      }
+
+      val deleteList = _deleteListState.value
+
+      if (deleteList != null) {
+        DeleteDialog(
+          item = deleteList,
+          message = stringResource(id = R.string.delete_message, deleteList.name),
+          onDeleteItem = { readingList ->
+            deleteReadingList(readingList)
+            _deleteListState.value = null
+          },
+          onDismiss = { _deleteListState.value = null }
         )
       }
     }
@@ -161,6 +177,8 @@ class ReadingListFragment : Fragment() {
           readingListsWithBooks.books.map { it.book.id }
         )
       )
+
+      readingListsState.value = repository.getReadingLists()
     }
   }
 

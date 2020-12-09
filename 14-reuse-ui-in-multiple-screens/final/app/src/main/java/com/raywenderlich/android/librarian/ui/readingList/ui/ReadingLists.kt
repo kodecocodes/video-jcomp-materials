@@ -21,17 +21,19 @@ import com.raywenderlich.android.librarian.model.relations.ReadingListsWithBooks
 @Composable
 fun ReadingLists(
   readingLists: List<ReadingListsWithBooks>,
-  onItemClick: (ReadingListsWithBooks) -> Unit
+  onItemClick: (ReadingListsWithBooks) -> Unit,
+  onLongItemTap: (ReadingListsWithBooks) -> Unit
 ) {
   LazyColumnFor(items = readingLists, modifier = Modifier.fillMaxWidth()) { readingList ->
-    ReadingListItem(readingList, onItemClick)
+    ReadingListItem(readingList, onItemClick, onLongItemTap)
   }
 }
 
 @Composable
 fun ReadingListItem(
   readingList: ReadingListsWithBooks,
-  onItemClick: (ReadingListsWithBooks) -> Unit
+  onItemClick: (ReadingListsWithBooks) -> Unit,
+  onLongItemTap: (ReadingListsWithBooks) -> Unit
 ) {
   Card(
     modifier = Modifier
@@ -40,7 +42,8 @@ fun ReadingListItem(
       .padding(8.dp)
       .clickable(
         onClick = { onItemClick(readingList) },
-        indication = null
+        indication = null,
+        onLongClick = { onLongItemTap(readingList) }
       ),
     elevation = 8.dp,
     border = BorderStroke(1.dp, color = MaterialTheme.colors.primary),

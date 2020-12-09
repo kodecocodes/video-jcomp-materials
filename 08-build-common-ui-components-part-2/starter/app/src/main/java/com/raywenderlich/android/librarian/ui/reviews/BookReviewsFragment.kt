@@ -38,23 +38,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.compose.material.FloatingActionButton
-import androidx.compose.material.Icon
-import androidx.compose.material.Scaffold
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.ComposeView
-import androidx.compose.ui.res.stringResource
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.lifecycleScope
-import com.raywenderlich.android.librarian.R
 import com.raywenderlich.android.librarian.model.relations.BookReview
 import com.raywenderlich.android.librarian.repository.LibrarianRepository
 import com.raywenderlich.android.librarian.ui.bookReviewDetails.BookReviewDetailsActivity
-import com.raywenderlich.android.librarian.ui.composeUi.TopBar
 import com.raywenderlich.android.librarian.utils.toast
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -83,37 +74,8 @@ class BookReviewsFragment : Fragment() {
     savedInstanceState: Bundle?
   ): View {
     return ComposeView(requireContext()).apply {
-      setContent {
-        BookReviewsContent()
-      }
+
     }
-  }
-
-  @Composable
-  fun BookReviewsContent() {
-    Scaffold(
-      topBar = { BookReviewsTopBar() },
-      floatingActionButton = { AddBookReview() }
-    ) {
-      BookReviewsContentWrapper()
-    }
-  }
-
-  @Composable
-  fun BookReviewsTopBar() {
-    TopBar(title = stringResource(id = R.string.book_reviews_title))
-  }
-
-  @Composable
-  fun AddBookReview() {
-    FloatingActionButton(onClick = { startAddBookReview() }) {
-      Icon(imageVector = Icons.Default.Add)
-    }
-  }
-
-  @Composable
-  fun BookReviewsContentWrapper() {
-
   }
 
   fun deleteReview(bookReview: BookReview) {

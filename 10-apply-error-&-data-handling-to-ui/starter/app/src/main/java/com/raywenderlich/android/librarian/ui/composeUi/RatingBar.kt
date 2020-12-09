@@ -26,15 +26,16 @@ fun RatingBar(
   currentRating: Int = 0,
   onRatingChanged: (Int) -> Unit = {}
 ) {
+
   val selectedRating = remember { mutableStateOf(currentRating) }
 
-  LazyRowFor(
-    items = range.toList(),
-    modifier = with(ColumnScope) { Modifier.align(Alignment.CenterHorizontally) },
-  ) { index ->
+  LazyRowFor(items = range.toList(),
+    modifier = with(ColumnScope) { Modifier.align(Alignment.CenterHorizontally) }) { index ->
     RatingItem(
       isSelected = index <= selectedRating.value,
-      isSelectable = isSelectable, index, isLargeRating
+      isSelectable = isSelectable,
+      index,
+      isLargeRating
     ) { newRating ->
       selectedRating.value = newRating
       onRatingChanged(selectedRating.value)
@@ -48,24 +49,26 @@ fun RatingItem(
   isSelectable: Boolean,
   rating: Int,
   isLargeRating: Boolean,
-  onRatingSelected: (Int) -> Unit
+  onRatingChanged: (Int) -> Unit
 ) {
 
   val padding = if (isLargeRating) 2.dp else 0.dp
   val size = if (isLargeRating) 48.dp else 16.dp
 
   val baseModifier = if (isSelectable) {
-    Modifier.clickable(onClick = { onRatingSelected(rating) }, indication = null)
+    Modifier.clickable(onClick = { onRatingChanged(rating) }, indication = null)
   } else {
     Modifier
   }
 
   Icon(
-    tint = colorResource(id = R.color.orange_200),
-    modifier =
-    baseModifier
-      .size(size)
-      .padding(padding),
-    imageVector = if (isSelected) Icons.Default.Star else vectorResource(id = R.drawable.ic_baseline_star_outline_24)
+    imageVector = if (isSelected)
+      Icons.Default.Star
+    else
+      vectorResource(id = R.drawable.ic_baseline_star_outline_24),
+    modifier = baseModifier
+      .padding(padding)
+      .size(size),
+    tint = colorResource(id = R.color.orange_200)
   )
 }

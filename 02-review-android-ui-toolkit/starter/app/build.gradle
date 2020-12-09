@@ -1,101 +1,102 @@
 plugins {
-    id 'com.android.application'
-    id 'kotlin-android'
-    id 'kotlin-kapt'
-    id 'dagger.hilt.android.plugin'
-    id 'kotlin-android-extensions'
+  id 'com.android.application'
+  id 'kotlin-android'
+  id 'kotlin-kapt'
+  id 'dagger.hilt.android.plugin'
+  id 'kotlin-android-extensions'
 }
 
 android {
-    compileSdkVersion rootProject.ext.compileSdkVersion
-    buildToolsVersion "30.0.2"
+  compileSdkVersion rootProject.ext.compileSdkVersion
+  buildToolsVersion "30.0.2"
 
-    defaultConfig {
-        applicationId "com.raywenderlich.android.librarian"
-        minSdkVersion rootProject.ext.minSdkVersion
-        targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 1
-        versionName "1.0"
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-    }
+  defaultConfig {
+    applicationId "com.raywenderlich.android.librarian"
+    minSdkVersion rootProject.ext.minSdkVersion
+    targetSdkVersion rootProject.ext.targetSdkVersion
+    versionCode 1
+    versionName "1.0"
+    testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+  }
 
-    buildFeatures {
-        compose true
-    }
+  buildFeatures {
+    compose true
+  }
 
-    buildTypes {
-        release {
-            minifyEnabled false
-            shrinkResources false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
+  buildTypes {
+    release {
+      minifyEnabled false
+      shrinkResources false
+      proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
     }
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
-    }
+  }
+  compileOptions {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+  }
 
-    kotlinOptions {
-        jvmTarget = '1.8'
-        useIR = true
-    }
+  kotlinOptions {
+    jvmTarget = '1.8'
+    useIR = true
+  }
 
-    composeOptions {
-        kotlinCompilerVersion kotlin_version
-        kotlinCompilerExtensionVersion project.ext.compose
-    }
+  composeOptions {
+    kotlinCompilerVersion kotlin_version
+    kotlinCompilerExtensionVersion project.ext.compose
+  }
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
-    def room_version = "2.2.5"
+  implementation fileTree(dir: 'libs', include: ['*.jar'])
+  def room_version = "2.2.5"
 
-    // Kotlin
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+  // Kotlin
+  implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
 
-    // Support Libraries
-    implementation 'androidx.appcompat:appcompat:1.2.0'
-    implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
-    implementation 'com.google.android.material:material:1.2.1'
-    implementation 'androidx.cardview:cardview:1.0.0'
-    implementation 'androidx.recyclerview:recyclerview:1.1.0'
-    implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
-    implementation "androidx.fragment:fragment-ktx:1.2.5"
+  // Support Libraries
+  implementation 'androidx.appcompat:appcompat:1.2.0'
+  implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
+  implementation 'com.google.android.material:material:1.2.1'
+  implementation 'androidx.cardview:cardview:1.0.0'
+  implementation 'androidx.recyclerview:recyclerview:1.1.0'
+  implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
+  implementation "androidx.fragment:fragment-ktx:1.2.5"
 
-    // compose
-    implementation "androidx.compose.ui:ui:$compose"
-    implementation "androidx.compose.material:material:$compose"
-    implementation "androidx.compose.ui:ui-tooling:$compose"
-    implementation "androidx.compose.runtime:runtime-livedata:$compose"
-    implementation "dev.chrisbanes.accompanist:accompanist-coil:0.2.1"
+  // compose
+  implementation "androidx.compose.ui:ui:$compose"
+  implementation "androidx.compose.material:material:$compose"
+  implementation "androidx.compose.ui:ui-tooling:$compose"
+  implementation "androidx.compose.runtime:runtime-livedata:$compose"
+  implementation "dev.chrisbanes.accompanist:accompanist-coil:0.4.0"
 
-    implementation 'com.github.bumptech.glide:glide:4.11.0'
-    kapt 'com.github.bumptech.glide:compiler:4.11.0'
+  implementation 'com.github.bumptech.glide:glide:4.11.0'
+  kapt 'com.github.bumptech.glide:compiler:4.11.0'
 
-    // room
-    implementation "androidx.room:room-runtime:$room_version"
-    kapt "androidx.room:room-compiler:$room_version"
-    implementation "androidx.room:room-ktx:$room_version"
+  // room
+  implementation "androidx.room:room-runtime:$room_version"
+  kapt "androidx.room:room-compiler:$room_version"
+  implementation "androidx.room:room-ktx:$room_version"
 
-    // coroutines
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.1'
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.4.1'
-    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.2.0'
-    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.2.0'
+  // coroutines
+  implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.1'
+  implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.4.1'
+  implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.2.0'
+  implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.2.0'
 
-    // hilt
-    implementation "com.google.dagger:hilt-android:2.28.3-alpha"
-    kapt "com.google.dagger:hilt-android-compiler:2.28.3-alpha"
+  // hilt
+  implementation "com.google.dagger:hilt-android:2.28.3-alpha"
+  kapt "com.google.dagger:hilt-android-compiler:2.28.3-alpha"
 
-    implementation 'androidx.hilt:hilt-lifecycle-viewmodel:1.0.0-alpha02'
-    kapt 'androidx.hilt:hilt-compiler:1.0.0-alpha02'
+  implementation 'androidx.hilt:hilt-lifecycle-viewmodel:1.0.0-alpha02'
+  kapt 'androidx.hilt:hilt-compiler:1.0.0-alpha02'
 
-    implementation 'com.google.code.gson:gson:2.8.6'
+  implementation 'com.google.code.gson:gson:2.8.6'
+
 }
 
 tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {
-    kotlinOptions {
-        jvmTarget = "1.8"
-        freeCompilerArgs += ["-Xallow-jvm-ir-dependencies", "-Xskip-prerelease-check"]
-    }
+  kotlinOptions {
+    jvmTarget = "1.8"
+    freeCompilerArgs += ["-Xallow-jvm-ir-dependencies", "-Xskip-prerelease-check"]
+  }
 }

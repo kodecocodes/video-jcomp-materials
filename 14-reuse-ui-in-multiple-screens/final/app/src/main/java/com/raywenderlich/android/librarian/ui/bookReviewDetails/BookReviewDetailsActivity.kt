@@ -38,7 +38,6 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.foundation.ScrollableColumn
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -65,6 +64,9 @@ import com.raywenderlich.android.librarian.model.ReadingEntry
 import com.raywenderlich.android.librarian.model.Review
 import com.raywenderlich.android.librarian.model.relations.BookReview
 import com.raywenderlich.android.librarian.repository.LibrarianRepository
+import com.raywenderlich.android.librarian.ui.bookReviewDetails.readingEntries.AddReadingEntryDialog
+import com.raywenderlich.android.librarian.ui.bookReviewDetails.readingEntries.ReadingEntries
+import com.raywenderlich.android.librarian.ui.composeUi.DeleteDialog
 import com.raywenderlich.android.librarian.ui.composeUi.LibrarianTheme
 import com.raywenderlich.android.librarian.ui.composeUi.RatingBar
 import com.raywenderlich.android.librarian.ui.composeUi.TopBar
@@ -84,6 +86,8 @@ class BookReviewDetailsActivity : AppCompatActivity() {
   lateinit var repository: LibrarianRepository
   private val _bookReviewDetailsState = mutableStateOf(EMPTY_BOOK_REVIEW)
   private val _genreState = mutableStateOf(EMPTY_GENRE)
+  private val _deleteEntryState = mutableStateOf<ReadingEntry?>(null)
+  private val _isShowingAddEntryState = mutableStateOf(false)
 
   companion object {
     private const val KEY_BOOK_REVIEW = "book_review"
@@ -132,7 +136,7 @@ class BookReviewDetailsActivity : AppCompatActivity() {
 
   @Composable
   fun AddReadingEntry() {
-    FloatingActionButton(onClick = { }) {
+    FloatingActionButton(onClick = { _isShowingAddEntryState.value = true }) {
       Icon(imageVector = Icons.Default.Add)
     }
   }
@@ -142,91 +146,128 @@ class BookReviewDetailsActivity : AppCompatActivity() {
     val bookReview = _bookReviewDetailsState.value
     val genre = _genreState.value
 
-    ScrollableColumn(
-      modifier = Modifier.fillMaxSize(),
-      horizontalAlignment = Alignment.CenterHorizontally
+    Box(
+      modifier = with(BoxScope) {
+        Modifier.fillMaxSize()
+          .align(Alignment.Center)
+      }
     ) {
+      ReadingEntries(
+        onItemLongClick = { _deleteEntryState.value = it },
+        content = {
+          Column(modifier = with(ColumnScope) {
+            Modifier.fillMaxSize()
+              .align(Alignment.CenterHorizontally)
+              .padding(bottom = 16.dp)
+          }, horizontalAlignment = Alignment.CenterHorizontally) {
+            Spacer(modifier = Modifier.height(16.dp))
 
-      Spacer(modifier = Modifier.height(16.dp))
+            Card(
+              modifier = Modifier
+                .size(width = 200.dp, height = 300.dp),
+              shape = RoundedCornerShape(16.dp),
+              elevation = 16.dp
+            ) {
+              CoilImage(
+                data = bookReview.review.imageUrl,
+                contentScale = ContentScale.FillWidth
+              )
+            }
 
-      Card(
-        modifier = Modifier
-          .size(width = 200.dp, height = 300.dp),
-        shape = RoundedCornerShape(16.dp),
-        elevation = 16.dp
-      ) {
-        CoilImage(
-          data = bookReview.review.imageUrl,
-          contentScale = ContentScale.FillWidth
+            Spacer(modifier = Modifier.height(16.dp))
+
+            Text(
+              text = bookReview.book.name,
+              fontWeight = FontWeight.Bold,
+              fontSize = 18.sp,
+              color = MaterialTheme.colors.onPrimary
+            )
+
+            Spacer(modifier = Modifier.height(6.dp))
+
+            Text(
+              text = genre.name,
+              fontSize = 12.sp,
+              color = MaterialTheme.colors.onPrimary
+            )
+
+            Spacer(modifier = Modifier.height(6.dp))
+
+            RatingBar(
+              range = 1..5,
+              isSelectable = false,
+              isLargeRating = false,
+              currentRating = bookReview.review.rating
+            )
+
+            Spacer(modifier = Modifier.height(6.dp))
+
+            Text(
+              text = stringResource(
+                id = R.string.last_updated_date,
+                formatDateToText(bookReview.review.lastUpdatedDate)
+              ),
+              fontSize = 12.sp,
+              color = MaterialTheme.colors.onPrimary
+            )
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            Spacer(
+              modifier = Modifier
+                .fillMaxWidth(0.9f)
+                .height(1.dp)
+                .background(
+                  brush = SolidColor(value = Color.LightGray),
+                  shape = RectangleShape
+                )
+            )
+
+            Text(
+              modifier = Modifier.padding(start = 20.dp, end = 20.dp, top = 8.dp, bottom = 8.dp),
+              text = bookReview.review.notes,
+              fontSize = 12.sp,
+              fontStyle = FontStyle.Italic,
+              color = MaterialTheme.colors.onPrimary
+            )
+
+            Spacer(
+              modifier = Modifier
+                .fillMaxWidth(0.9f)
+                .height(1.dp)
+                .background(
+                  brush = SolidColor(value = Color.LightGray),
+                  shape = RectangleShape
+                )
+            )
+          }
+        },
+        readingEntries = bookReview.review.entries,
+      )
+
+      if (_isShowingAddEntryState.value) {
+        AddReadingEntryDialog(
+          onDismiss = { _isShowingAddEntryState.value = false },
+          onReadingEntryFinished = {
+            addNewEntry(it)
+            _isShowingAddEntryState.value = false
+          }
         )
       }
 
-      Spacer(modifier = Modifier.height(16.dp))
+      val entryToDelete = _deleteEntryState.value
 
-      Text(
-        text = bookReview.book.name,
-        fontWeight = FontWeight.Bold,
-        fontSize = 18.sp,
-        color = MaterialTheme.colors.onPrimary
-      )
-
-      Spacer(modifier = Modifier.height(6.dp))
-
-      Text(
-        text = genre.name,
-        fontSize = 12.sp,
-        color = MaterialTheme.colors.onPrimary
-      )
-
-      Spacer(modifier = Modifier.height(6.dp))
-
-      RatingBar(
-        range = 1..5,
-        isSelectable = false,
-        isLargeRating = false,
-        currentRating = bookReview.review.rating
-      )
-
-      Spacer(modifier = Modifier.height(6.dp))
-
-      Text(
-        text = stringResource(
-          id = R.string.last_updated_date,
-          formatDateToText(bookReview.review.lastUpdatedDate)
-        ),
-        fontSize = 12.sp,
-        color = MaterialTheme.colors.onPrimary
-      )
-
-      Spacer(modifier = Modifier.height(8.dp))
-
-      Spacer(
-        modifier = Modifier
-          .fillMaxWidth(0.9f)
-          .height(1.dp)
-          .background(
-            brush = SolidColor(value = Color.LightGray),
-            shape = RectangleShape
-          )
-      )
-
-      Text(
-        modifier = Modifier.padding(start = 20.dp, end = 20.dp, top = 8.dp, bottom = 8.dp),
-        text = bookReview.review.notes,
-        fontSize = 12.sp,
-        fontStyle = FontStyle.Italic,
-        color = MaterialTheme.colors.onPrimary
-      )
-
-      Spacer(
-        modifier = Modifier
-          .fillMaxWidth(0.9f)
-          .height(1.dp)
-          .background(
-            brush = SolidColor(value = Color.LightGray),
-            shape = RectangleShape
-          )
-      )
+      if (entryToDelete != null) {
+        DeleteDialog(
+          item = entryToDelete,
+          message = stringResource(id = R.string.delete_entry_message),
+          onDeleteItem = {
+            removeReadingEntry(it)
+            _deleteEntryState.value = null
+          },
+          onDismiss = { _deleteEntryState.value = null }
+        )
+      }
     }
   }
 

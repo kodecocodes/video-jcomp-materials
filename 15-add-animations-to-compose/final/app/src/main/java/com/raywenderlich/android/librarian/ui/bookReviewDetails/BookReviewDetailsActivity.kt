@@ -40,7 +40,6 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.animation.core.TransitionState
 import androidx.compose.animation.transition
-import androidx.compose.foundation.ScrollableColumn
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -52,7 +51,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.draw.drawOpacity
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.SolidColor
@@ -167,99 +165,102 @@ class BookReviewDetailsActivity : AppCompatActivity() {
           .align(Alignment.Center)
       }
     ) {
-      ScrollableColumn(
-        modifier = Modifier.fillMaxSize(),
-        horizontalAlignment = Alignment.CenterHorizontally
-      ) {
+      ReadingEntries(
+        onItemLongClick = { _deleteEntryState.value = it },
+        content = {
+          Column(modifier = with(ColumnScope) {
+            Modifier.fillMaxSize()
+              .align(Alignment.CenterHorizontally)
+              .padding(bottom = 16.dp)
+          }, horizontalAlignment = Alignment.CenterHorizontally) {
+            Spacer(modifier = Modifier.height(state[imageMarginTop]))
 
-        Spacer(modifier = Modifier.height(state[imageMarginTop]))
+            Card(
+              modifier = Modifier
+                .size(width = 200.dp, height = 300.dp),
+              shape = RoundedCornerShape(16.dp),
+              elevation = 16.dp
+            ) {
+              CoilImage(
+                data = bookReview.review.imageUrl,
+                contentScale = ContentScale.FillWidth
+              )
+            }
 
-        Card(
-          modifier = Modifier
-            .size(width = 200.dp, height = 300.dp),
-          shape = RoundedCornerShape(16.dp),
-          elevation = 16.dp
-        ) {
-          CoilImage(
-            data = bookReview.review.imageUrl,
-            contentScale = ContentScale.FillWidth
-          )
-        }
+            Spacer(modifier = Modifier.height(state[titleMarginTop]))
 
-        Spacer(modifier = Modifier.height(state[titleMarginTop]))
-
-        Text(
-          text = bookReview.book.name,
-          fontWeight = FontWeight.Bold,
-          fontSize = 18.sp,
-          color = MaterialTheme.colors.onPrimary,
-          modifier = Modifier.alpha(state[contentAlpha])
-        )
-
-        Spacer(modifier = Modifier.height(state[contentMarginTop]))
-
-        Text(
-          text = genre.name,
-          fontSize = 12.sp,
-          color = MaterialTheme.colors.onPrimary,
-          modifier = Modifier.alpha(state[contentAlpha])
-        )
-
-        Spacer(modifier = Modifier.height(state[contentMarginTop]))
-
-        RatingBar(
-          range = 1..5,
-          isSelectable = false,
-          isLargeRating = false,
-          currentRating = bookReview.review.rating
-        )
-
-        Spacer(modifier = Modifier.height(state[contentMarginTop]))
-
-        Text(
-          text = stringResource(
-            id = R.string.last_updated_date,
-            formatDateToText(bookReview.review.lastUpdatedDate)
-          ),
-          fontSize = 12.sp,
-          color = MaterialTheme.colors.onPrimary,
-          modifier = Modifier.alpha(state[contentAlpha])
-        )
-
-        Spacer(modifier = Modifier.height(8.dp))
-
-        Spacer(
-          modifier = Modifier
-            .fillMaxWidth(0.9f)
-            .height(1.dp)
-            .background(
-              brush = SolidColor(value = Color.LightGray),
-              shape = RectangleShape
+            Text(
+              text = bookReview.book.name,
+              fontWeight = FontWeight.Bold,
+              fontSize = 18.sp,
+              color = MaterialTheme.colors.onPrimary,
+              modifier = Modifier.alpha(state[contentAlpha])
             )
-        )
 
-        Text(
-          modifier = Modifier
-            .padding(start = 20.dp, end = 20.dp, top = 8.dp, bottom = 8.dp)
-            .alpha(state[contentAlpha]),
-          text = bookReview.review.notes,
-          fontSize = 12.sp,
-          fontStyle = FontStyle.Italic,
-          color = MaterialTheme.colors.onPrimary,
-        )
+            Spacer(modifier = Modifier.height(state[contentMarginTop]))
 
-        Spacer(
-          modifier = Modifier
-            .fillMaxWidth(0.9f)
-            .height(1.dp)
-            .background(
-              brush = SolidColor(value = Color.LightGray),
-              shape = RectangleShape
+            Text(
+              text = genre.name,
+              fontSize = 12.sp,
+              color = MaterialTheme.colors.onPrimary,
+              modifier = Modifier.alpha(state[contentAlpha])
             )
-        )
 
-        ReadingEntries(bookReview.review.entries) { _deleteEntryState.value = it }
-      }
+            Spacer(modifier = Modifier.height(state[contentMarginTop]))
+
+            RatingBar(
+              range = 1..5,
+              isSelectable = false,
+              isLargeRating = false,
+              currentRating = bookReview.review.rating
+            )
+
+            Spacer(modifier = Modifier.height(state[contentMarginTop]))
+
+            Text(
+              text = stringResource(
+                id = R.string.last_updated_date,
+                formatDateToText(bookReview.review.lastUpdatedDate)
+              ),
+              fontSize = 12.sp,
+              color = MaterialTheme.colors.onPrimary,
+              modifier = Modifier.alpha(state[contentAlpha])
+            )
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            Spacer(
+              modifier = Modifier
+                .fillMaxWidth(0.9f)
+                .height(1.dp)
+                .background(
+                  brush = SolidColor(value = Color.LightGray),
+                  shape = RectangleShape
+                )
+            )
+
+            Text(
+              modifier = Modifier.padding(start = 20.dp, end = 20.dp, top = 8.dp, bottom = 8.dp)
+                .alpha(state[contentAlpha]),
+              text = bookReview.review.notes,
+              fontSize = 12.sp,
+              fontStyle = FontStyle.Italic,
+              color = MaterialTheme.colors.onPrimary
+            )
+
+            Spacer(
+              modifier = Modifier
+                .fillMaxWidth(0.9f)
+                .height(1.dp)
+                .background(
+                  brush = SolidColor(value = Color.LightGray),
+                  shape = RectangleShape
+                )
+            )
+          }
+        },
+        readingEntries = bookReview.review.entries,
+      )
 
       if (_isShowingAddEntryState.value) {
         AddReadingEntryDialog(

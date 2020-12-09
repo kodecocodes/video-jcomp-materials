@@ -1,8 +1,8 @@
 package com.raywenderlich.android.librarian.ui.books.ui
 
+import androidx.compose.material.Text
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.RadioButton
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -46,7 +46,8 @@ fun BookFilter(
     Column {
       Row {
         RadioButton(
-          selected = currentFilter.value == 0, onClick = { currentFilter.value = 0 },
+          selected = currentFilter.value == 0,
+          onClick = { currentFilter.value = 0 },
           modifier = Modifier.padding(8.dp)
         )
 
@@ -89,25 +90,17 @@ fun BookFilter(
       GenrePicker(
         genres = genres,
         selectedGenreId = currentlySelectedGenre?.id ?: "",
-        onItemPicked = {
-          currentGenreFilter.value = it
-        }
-      )
+        onItemPicked = { currentGenreFilter.value = it })
     }
 
     if (currentFilter.value == 2) {
-      RatingBar(
-        range = 1..5,
+      RatingBar(range = 1..5,
         currentRating = currentRatingFilter.value,
         isLargeRating = true,
         onRatingChanged = { newRating -> currentRatingFilter.value = newRating })
     }
 
-    val isGenreValid = currentlySelectedGenre != null && currentlySelectedGenre.id.isNotEmpty()
-    val isFilterValid = (currentFilter.value == 1 && isGenreValid) || currentFilter.value != 1
-
     ActionButton(
-      isEnabled = isFilterValid,
       modifier = Modifier.fillMaxWidth(),
       text = stringResource(id = R.string.confirm_filter),
       onClick = {

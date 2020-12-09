@@ -110,7 +110,7 @@ class BooksFragment : Fragment() {
   fun BooksTopBar(bookFilterDrawerState: BottomDrawerState) {
     TopBar(
       title = stringResource(id = R.string.my_books_title),
-      actions = { FilterButton(bookFilterDrawerState) })
+      content = { FilterButton(bookFilterDrawerState) })
   }
 
   @Composable

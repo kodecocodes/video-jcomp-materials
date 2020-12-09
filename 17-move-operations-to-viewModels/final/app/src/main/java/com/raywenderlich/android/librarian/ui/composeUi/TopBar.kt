@@ -14,7 +14,7 @@ fun TopBar(
   modifier: Modifier = Modifier,
   title: String = "Add a new review",
   onBackPressed: (() -> Unit)? = null,
-  actions: @Composable RowScope.() -> Unit = {}
+  content: @Composable RowScope.() -> Unit = {}
 ) {
   val backButtonAction: (@Composable () -> Unit)? = if (onBackPressed != null) {
     @Composable { BackButton(onBackAction = { onBackPressed() }) }
@@ -26,7 +26,7 @@ fun TopBar(
     modifier = modifier,
     title = { Text(title) },
     navigationIcon = backButtonAction,
-    actions = actions,
+    actions = content,
     backgroundColor = MaterialTheme.colors.primary,
     contentColor = MaterialTheme.colors.onSecondary
   )

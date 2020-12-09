@@ -12,26 +12,26 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.raywenderlich.android.librarian.model.relations.BookAndGenre
 
 @Composable
-@Preview
 fun BooksList(
   books: List<BookAndGenre> = emptyList()
 ) {
-  LazyColumnFor(items = books, modifier = Modifier.padding(top = 16.dp)) { bookAndGenre ->
+
+  LazyColumnFor(
+    items = books,
+    modifier = Modifier.padding(top = 16.dp)
+  ) { bookAndGenre ->
     BookListItem(bookAndGenre)
     Spacer(modifier = Modifier.size(2.dp))
   }
 }
 
 @Composable
-fun BookListItem(
-  bookAndGenre: BookAndGenre
-) {
+fun BookListItem(bookAndGenre: BookAndGenre) {
   Card(
     modifier = Modifier
       .wrapContentHeight()
@@ -47,29 +47,29 @@ fun BookListItem(
 
       Column {
         Text(
-          modifier = Modifier.padding(top = 16.dp),
           text = bookAndGenre.book.name,
-          color = MaterialTheme.colors.primary,
+          modifier = Modifier.padding(top = 16.dp),
           fontSize = 18.sp,
-          fontWeight = FontWeight.Bold
+          fontWeight = FontWeight.Bold,
+          color = MaterialTheme.colors.primary
         )
 
         Spacer(modifier = Modifier.height(2.dp))
 
         Text(
-          fontSize = 16.sp,
           text = bookAndGenre.genre.name,
-          fontStyle = FontStyle.Italic
+          fontStyle = FontStyle.Italic,
+          fontSize = 16.sp
         )
 
         Spacer(modifier = Modifier.height(8.dp))
 
         Text(
-          fontSize = 12.sp,
-          overflow = TextOverflow.Ellipsis,
           text = bookAndGenre.book.description,
           fontStyle = FontStyle.Italic,
-          modifier = Modifier.fillMaxHeight().padding(end = 16.dp)
+          overflow = TextOverflow.Ellipsis,
+          modifier = Modifier.fillMaxHeight().padding(end = 16.dp),
+          fontSize = 12.sp
         )
 
         Spacer(modifier = Modifier.height(16.dp))

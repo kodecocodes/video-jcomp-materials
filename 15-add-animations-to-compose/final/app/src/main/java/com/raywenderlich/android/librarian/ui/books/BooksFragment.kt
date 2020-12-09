@@ -53,6 +53,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.res.stringResource
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.raywenderlich.android.librarian.R
 import com.raywenderlich.android.librarian.model.Book
@@ -80,6 +81,7 @@ class BooksFragment : Fragment() {
 
   @Inject
   lateinit var repository: LibrarianRepository
+  private val booksViewModel by viewModels<BooksViewModel>()
 
   private val _booksState = mutableStateOf(emptyList<BookAndGenre>())
   private val _genresState = mutableStateOf<List<Genre>>(emptyList())
@@ -113,7 +115,7 @@ class BooksFragment : Fragment() {
   fun BooksTopBar(bookFilterDrawerState: BottomDrawerState) {
     TopBar(
       title = stringResource(id = R.string.my_books_title),
-      actions = { FilterButton(bookFilterDrawerState) })
+      content = { FilterButton(bookFilterDrawerState) })
   }
 
   @Composable

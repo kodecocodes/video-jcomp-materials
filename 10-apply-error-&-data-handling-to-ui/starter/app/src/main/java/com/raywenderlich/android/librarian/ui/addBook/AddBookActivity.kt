@@ -132,9 +132,12 @@ class AddBookActivity : AppCompatActivity(), AddBookView {
         label = stringResource(id = R.string.book_description_hint)
       )
 
-      GenrePicker(genres = genres, onItemPicked = {
-        _addBookState.value = _addBookState.value.copy(genreId = it.id)
-      }, selectedGenreId = _addBookState.value.genreId)
+      GenrePicker(
+        genres = genres,
+        selectedGenreId = _addBookState.value.genreId,
+        onItemPicked = {
+          _addBookState.value = _addBookState.value.copy(genreId = it.id)
+        })
 
       ActionButton(
         text = stringResource(id = R.string.add_book_button_text),

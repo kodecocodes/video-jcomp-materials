@@ -182,7 +182,7 @@ class AddBookReviewActivity : AppCompatActivity(), AddReviewView {
   }
 
   fun addBookReview() {
-    val state = _bookReviewState.value ?: return
+    val state = _bookReviewState.value
 
     lifecycleScope.launch {
       val bookId = state.bookAndGenre.book.id

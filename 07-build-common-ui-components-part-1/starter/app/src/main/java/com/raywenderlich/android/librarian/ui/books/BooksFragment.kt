@@ -46,6 +46,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.lifecycleScope
@@ -57,7 +58,6 @@ import com.raywenderlich.android.librarian.repository.LibrarianRepository
 import com.raywenderlich.android.librarian.ui.books.filter.ByGenre
 import com.raywenderlich.android.librarian.ui.books.filter.ByRating
 import com.raywenderlich.android.librarian.ui.books.filter.Filter
-import com.raywenderlich.android.librarian.ui.books.ui.BookFilter
 import com.raywenderlich.android.librarian.ui.composeUi.TopBar
 import com.raywenderlich.android.librarian.utils.toast
 import dagger.hilt.android.AndroidEntryPoint
@@ -90,61 +90,35 @@ class BooksFragment : Fragment() {
 
   @Composable
   fun BooksContent() {
-    val bookFilterDrawerState = rememberBottomDrawerState(initialValue = BottomDrawerValue.Closed)
+    Scaffold(topBar = { BooksTopBar() },
+      floatingActionButton = { AddNewBook() }) {
 
-    Scaffold(topBar = { BooksTopBar(bookFilterDrawerState) },
-      floatingActionButton = { AddNewBook(bookFilterDrawerState) }) {
-      BookFilterModalDrawer(bookFilterDrawerState)
     }
   }
 
   @Composable
-  fun BooksTopBar(bookFilterDrawerState: BottomDrawerState) {
+  fun BooksTopBar() {
     TopBar(
       title = stringResource(id = R.string.my_books_title),
-      actions = { FilterButton(bookFilterDrawerState) })
+      content = { FilterButton() })
   }
 
   @Composable
-  fun FilterButton(bookFilterDrawerState: BottomDrawerState) {
+  fun FilterButton() {
     IconButton(onClick = {
-      if (!bookFilterDrawerState.isClosed) {
-        bookFilterDrawerState.close()
-      } else {
-        bookFilterDrawerState.expand()
-      }
+
     }) {
       Icon(Icons.Default.Edit, tint = Color.White)
     }
   }
 
   @Composable
-  fun BookFilterModalDrawer(bookFilterDrawerState: BottomDrawerState) {
-    val books = _booksState.value ?: emptyList()
-
-    BottomDrawerLayout(
-      drawerContent = { BookFilterModalDrawerContent(bookFilterDrawerState) },
-      drawerState = bookFilterDrawerState,
-      bodyContent = { BooksList(books) })
-  }
-
-  @Composable
-  fun BookFilterModalDrawerContent(bookFilterDrawerState: BottomDrawerState) {
-    val genres = _genresState.value ?: emptyList()
-
-    BookFilter(filter, genres, onFilterSelected = {
-      bookFilterDrawerState.close()
-      this.filter = it
-      loadBooks()
-    })
-  }
-
-  @Composable
-  fun AddNewBook(bookFilterDrawerState: BottomDrawerState) {
+  @Preview
+  fun AddNewBook() {
     FloatingActionButton(
       content = { Icon(Icons.Filled.Add) },
       onClick = {
-        bookFilterDrawerState.close { showAddBook() }
+        showAddBook()
       },
     )
   }
@@ -155,7 +129,7 @@ class BooksFragment : Fragment() {
     loadBooks()
   }
 
-  private fun loadGenres() {
+  fun loadGenres() {
     lifecycleScope.launch {
       val genres = repository.getGenres()
 

@@ -40,9 +40,9 @@ fun InputField(
         top = 4.dp,
         bottom = 4.dp
       ),
+    keyboardOptions = KeyboardOptions(keyboardType = keyboardType, imeAction = imeAction),
     activeColor = MaterialTheme.colors.primary,
     inactiveColor = MaterialTheme.colors.primaryVariant,
-    keyboardOptions = KeyboardOptions(keyboardType = keyboardType, imeAction = imeAction),
     visualTransformation = getVisualTransformation(keyboardType),
     isErrorValue = !isInputValid
   )

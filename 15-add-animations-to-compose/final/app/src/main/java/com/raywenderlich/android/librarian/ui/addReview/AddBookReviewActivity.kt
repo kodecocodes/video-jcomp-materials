@@ -37,6 +37,7 @@ package com.raywenderlich.android.librarian.ui.addReview
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.ScrollableColumn
 import androidx.compose.foundation.layout.*
@@ -71,6 +72,7 @@ class AddBookReviewActivity : AppCompatActivity(), AddReviewView {
 
   @Inject
   lateinit var repository: LibrarianRepository
+  private val addBookReviewViewModel by viewModels<AddReviewViewModel>()
 
   private val _bookReviewState = mutableStateOf(AddBookReviewState())
   private val _books = mutableStateOf(emptyList<BookAndGenre>())

@@ -97,8 +97,8 @@ class BookReviewsFragment : Fragment() {
     }
   }
 
-  override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-    super.onViewCreated(view, savedInstanceState)
+  override fun onStart() {
+    super.onStart()
 
     lifecycleScope.launch {
       bookReviewsState.value = repository.getReviews()
@@ -138,6 +138,12 @@ class BookReviewsFragment : Fragment() {
           .fillMaxSize()
       }
     ) {
+      BookReviewsList(bookReviews,
+        onItemClick = ::onItemSelected,
+        onLongItemTap = { bookReview ->
+          _deleteReviewState.value = bookReview
+        })
+
       val reviewToDelete = _deleteReviewState.value
 
       if (reviewToDelete != null) {
@@ -148,24 +154,12 @@ class BookReviewsFragment : Fragment() {
             R.string.delete_review_message, reviewToDelete.book.name
           ),
           onDeleteItem = { bookReview ->
-            deleteReview(bookReview)
-            _deleteReviewState.value = null
+            bookReviewsViewModel.deleteReview(bookReview)
+            bookReviewsViewModel.onDialogDismissed()
           },
-          onDismiss = { _deleteReviewState.value = null }
+          onDismiss = { bookReviewsViewModel.onDialogDismissed() }
         )
       }
-    }
-    BookReviewsList(bookReviews,
-      onItemClick = ::onItemSelected,
-      onLongItemTap = { _deleteReviewState.value = it }
-    )
-  }
-
-  fun deleteReview(bookReview: BookReview) {
-    lifecycleScope.launch {
-      repository.removeReview(bookReview.review)
-
-      bookReviewsState.value = repository.getReviews()
     }
   }
 

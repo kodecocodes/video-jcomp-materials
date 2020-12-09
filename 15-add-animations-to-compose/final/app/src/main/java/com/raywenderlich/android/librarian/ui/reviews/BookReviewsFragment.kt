@@ -53,6 +53,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.res.stringResource
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.raywenderlich.android.librarian.R
 import com.raywenderlich.android.librarian.model.relations.BookReview
@@ -78,6 +79,7 @@ class BookReviewsFragment : Fragment() {
 
   @Inject
   lateinit var repository: LibrarianRepository
+  private val bookReviewsViewModel by viewModels<BookReviewsViewModel>()
 
   val bookReviewsState = mutableStateOf(emptyList<BookReview>())
   private val _deleteReviewState = mutableStateOf<BookReview?>(null)
@@ -95,8 +97,8 @@ class BookReviewsFragment : Fragment() {
     }
   }
 
-  override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-    super.onViewCreated(view, savedInstanceState)
+  override fun onStart() {
+    super.onStart()
 
     lifecycleScope.launch {
       bookReviewsState.value = repository.getReviews()

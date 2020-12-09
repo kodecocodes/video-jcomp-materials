@@ -97,8 +97,8 @@ class BookReviewsFragment : Fragment() {
     }
   }
 
-  override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-    super.onViewCreated(view, savedInstanceState)
+  override fun onStart() {
+    super.onStart()
 
     lifecycleScope.launch {
       bookReviewsState.value = repository.getReviews()

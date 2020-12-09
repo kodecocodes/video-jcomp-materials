@@ -93,5 +93,7 @@ interface LibrarianRepository {
 
   suspend fun addReadingList(readingList: ReadingList)
 
-  fun getReadingListById(id: String): Flow<ReadingListsWithBooks>
+  suspend fun getReadingListById(id: String): ReadingListsWithBooks
+
+  fun getReadingListByIdFlow(id: String): Flow<ReadingListsWithBooks>
 }

@@ -39,9 +39,9 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.ScrollableColumn
+import androidx.compose.material.Text
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -52,7 +52,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.lifecycleScope
 import com.raywenderlich.android.librarian.R
 import com.raywenderlich.android.librarian.model.Review
@@ -76,7 +75,7 @@ class AddBookReviewActivity : AppCompatActivity(), AddReviewView {
   @Inject
   lateinit var repository: LibrarianRepository
 
-  private val _bookReviewState = MutableLiveData(AddBookReviewState())
+  private val _bookReviewState = mutableStateOf(AddBookReviewState())
   private val _books = mutableStateOf(emptyList<BookAndGenre>())
 
   companion object {
@@ -86,7 +85,6 @@ class AddBookReviewActivity : AppCompatActivity(), AddReviewView {
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContent { AddBookReviewContent() }
-
     loadBooks()
   }
 
@@ -132,11 +130,11 @@ class AddBookReviewActivity : AppCompatActivity(), AddReviewView {
 
       Spacer(modifier = Modifier.height(8.dp))
 
-      BookPicker(books = _books.value,
+      BookPicker(
+        books = _books.value,
         selectedBookId = currentlySelectedBook.value.book.id,
-        onItemPicked = { bookAndGenre ->
-          _bookReviewState.value = _bookReviewState.value?.copy(bookAndGenre = bookAndGenre)
-          currentlySelectedBook.value = bookAndGenre
+        onItemPicked = {
+          _bookReviewState.value = _bookReviewState.value.copy(bookAndGenre = it)
         })
 
       Spacer(modifier = Modifier.height(8.dp))
@@ -145,18 +143,20 @@ class AddBookReviewActivity : AppCompatActivity(), AddReviewView {
         label = stringResource(id = R.string.book_image_url_input_hint),
         value = bookUrl.value,
         onStateChanged = { url ->
-          _bookReviewState.value = _bookReviewState.value?.copy(bookImageUrl = url)
+          _bookReviewState.value = _bookReviewState.value.copy(bookImageUrl = url)
           bookUrl.value = url
         }
       )
 
       Spacer(modifier = Modifier.height(16.dp))
 
-      RatingBar(
-        range = 1..5,
+      RatingBar(range = 1..5,
         currentRating = currentRatingFilter.value,
         isLargeRating = true,
-        onRatingChanged = { newRating -> currentRatingFilter.value = newRating })
+        onRatingChanged = { newRating ->
+          currentRatingFilter.value = newRating
+          _bookReviewState.value = _bookReviewState.value.copy(rating = newRating)
+        })
 
       Spacer(modifier = Modifier.height(16.dp))
 
@@ -164,7 +164,7 @@ class AddBookReviewActivity : AppCompatActivity(), AddReviewView {
         label = stringResource(id = R.string.review_notes_hint),
         value = bookNotes.value,
         onStateChanged = { notes ->
-          _bookReviewState.value = _bookReviewState.value?.copy(notes = notes)
+          _bookReviewState.value = _bookReviewState.value.copy(notes = notes)
           bookNotes.value = notes
         }
       )
@@ -182,7 +182,7 @@ class AddBookReviewActivity : AppCompatActivity(), AddReviewView {
   }
 
   fun addBookReview() {
-    val state = _bookReviewState.value ?: return
+    val state = _bookReviewState.value
 
     lifecycleScope.launch {
       val bookId = state.bookAndGenre.book.id
