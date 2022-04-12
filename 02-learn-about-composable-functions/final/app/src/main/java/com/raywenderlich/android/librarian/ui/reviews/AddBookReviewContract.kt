@@ -4,11 +4,12 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import androidx.activity.result.contract.ActivityResultContract
+import com.raywenderlich.android.librarian.ui.addBook.AddBookActivity
 import com.raywenderlich.android.librarian.ui.addReview.AddBookReviewActivity
 
 class AddBookReviewContract : ActivityResultContract<Int, Boolean>() {
 
-  override fun createIntent(context: Context, input: Int?): Intent {
+  override fun createIntent(context: Context, input: Int): Intent {
     return AddBookReviewActivity.getIntent(context)
   }
 
