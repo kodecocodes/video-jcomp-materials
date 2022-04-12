@@ -41,6 +41,8 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.raywenderlich.android.librarian.R
+import com.raywenderlich.android.librarian.databinding.ActivityMainBinding
+import com.raywenderlich.android.librarian.databinding.ActivityMainBinding.inflate
 import com.raywenderlich.android.librarian.ui.books.BooksFragment
 import com.raywenderlich.android.librarian.ui.readingList.ReadingListFragment
 import com.raywenderlich.android.librarian.ui.reviews.BookReviewsFragment
@@ -48,6 +50,8 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
+
+  lateinit var binding : ActivityMainBinding
 
   private var reviewsFragment: BookReviewsFragment? = null
   private var readingListFragment: ReadingListFragment? = null
@@ -59,6 +63,7 @@ class MainActivity : AppCompatActivity() {
 
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_main)
+    binding = inflate(layoutInflater)
 
     initUi()
 
@@ -68,17 +73,15 @@ class MainActivity : AppCompatActivity() {
   }
 
   private fun initUi() {
-    val bottomNavigation = findViewById<BottomNavigationView>(R.id.bottomNavigation)
-
     val colorDrawable = R.color.bottom_view_selector
 
-    bottomNavigation.itemTextColor =
+    binding.bottomNavigation.itemTextColor =
       ResourcesCompat.getColorStateList(resources, colorDrawable, theme)
 
-    bottomNavigation.itemIconTintList =
+    binding.bottomNavigation.itemIconTintList =
       ResourcesCompat.getColorStateList(resources, colorDrawable, theme)
 
-    bottomNavigation.setOnNavigationItemSelectedListener { menuItem ->
+    binding.bottomNavigation.setOnNavigationItemSelectedListener { menuItem ->
       displayNextFragment(menuItem.itemId)
       true
     }
