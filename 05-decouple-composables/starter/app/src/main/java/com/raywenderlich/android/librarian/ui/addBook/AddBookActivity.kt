@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020 Razeware LLC
+ * Copyright (c) 2022 Razeware LLC
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -37,9 +37,8 @@ package com.raywenderlich.android.librarian.ui.addBook
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.material.Icon
-import androidx.compose.material.Text
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -52,7 +51,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.setContent
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.MutableLiveData
@@ -70,7 +68,7 @@ import javax.inject.Inject
 class AddBookActivity : AppCompatActivity(), AddBookView {
 
   private val _addBookState = MutableLiveData(AddBookState())
-  private val _genresState = MutableLiveData(emptyList<Genre>())
+  private val _genreState = MutableLiveData(emptyList<Genre>())
 
   @Inject
   lateinit var repository: LibrarianRepository
@@ -88,7 +86,7 @@ class AddBookActivity : AppCompatActivity(), AddBookView {
 
   private fun loadGenres() {
     lifecycleScope.launch {
-      _genresState.value = repository.getGenres()
+      _genreState.value = repository.getGenres()
     }
   }
 
@@ -99,66 +97,56 @@ class AddBookActivity : AppCompatActivity(), AddBookView {
     }
   }
 
+  /*
+  * Update Note: onBackPressed() is deprecated.
+  * Use onBackPressedDispatcher.onBackPressed() instead.
+  * */
   @Composable
   fun AddBookTopBar() {
-    TopAppBar(
-      title = {
-        Text(text = stringResource(id = R.string.add_book_title))
-      },
-      navigationIcon = {
-        IconButton(onClick = { onBackPressed() }) {
-          Icon(Icons.Default.ArrowBack)
-        }
-      },
-      contentColor = Color.White,
-      backgroundColor = colorResource(id = R.color.colorPrimary)
-    )
+    TopAppBar(title = {
+      Text(text = stringResource(id = R.string.add_book_title))
+    },
+    navigationIcon = {
+      IconButton(onClick = { onBackPressedDispatcher.onBackPressed() }) {
+        Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "Back")
+      }
+    }, contentColor = Color.White,
+    backgroundColor = colorResource(id = R.color.colorPrimary))
   }
 
   @Composable
   fun AddBookFormContent() {
-    val genres = _genresState.value ?: emptyList()
+    val genres = _genreState.value ?: emptyList()
     val isGenresPickerOpen = remember { mutableStateOf(false) }
     val bookNameState = remember { mutableStateOf("") }
     val bookDescriptionState = remember { mutableStateOf("") }
-    val selectedGenreName =
-      genres.firstOrNull { it.id == _addBookState.value?.genreId }?.name ?: "None"
+    val selectedGenreName = genres.firstOrNull { it.id == _addBookState.value?.genreId }?.name
+      ?: "None"
 
     Column(
       modifier = Modifier.fillMaxSize(),
-      horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-      OutlinedTextField(
-        value = bookNameState.value,
+      horizontalAlignment = Alignment.CenterHorizontally) {
+      OutlinedTextField(value = bookNameState.value,
         onValueChange = { newValue ->
           bookNameState.value = newValue
           _addBookState.value = _addBookState.value?.copy(name = newValue)
         },
         label = { Text(text = stringResource(id = R.string.book_title_hint)) })
 
-      OutlinedTextField(
-        value = bookDescriptionState.value,
+      OutlinedTextField(value = bookDescriptionState.value,
         onValueChange = { newValue ->
           bookDescriptionState.value = newValue
           _addBookState.value = _addBookState.value?.copy(description = newValue)
         },
         label = { Text(text = stringResource(id = R.string.book_description_hint)) })
 
-      DropdownMenu(
-        toggle = {
-          Row(verticalAlignment = Alignment.CenterVertically) {
-            TextButton(
-              onClick = { isGenresPickerOpen.value = true },
-              content = { Text(text = stringResource(id = R.string.genre_select)) })
+      Row(verticalAlignment = Alignment.CenterVertically) {
 
-            Text(text = selectedGenreName)
-          }
-        },
-        expanded = isGenresPickerOpen.value,
-        onDismissRequest = {
-          isGenresPickerOpen.value = false
-        },
-        dropdownContent = {
+        TextButton(onClick = { isGenresPickerOpen.value = true },
+          content = { Text(text = stringResource(id = R.string.genre_select)) })
+
+        DropdownMenu(expanded = isGenresPickerOpen.value,
+          onDismissRequest = { isGenresPickerOpen.value = false }) {
           for (genre in genres) {
             DropdownMenuItem(onClick = {
               _addBookState.value = _addBookState.value?.copy(genreId = genre.id)
@@ -167,11 +155,12 @@ class AddBookActivity : AppCompatActivity(), AddBookView {
               Text(text = genre.name)
             }
           }
-        })
+        }
+        
+        Text(text = selectedGenreName)
+      }
 
-      TextButton(
-        onClick = { onAddBookTapped() }
-      ) {
+      TextButton(onClick = { onAddBookTapped() }) {
         Text(text = stringResource(id = R.string.add_book_button_text))
       }
     }

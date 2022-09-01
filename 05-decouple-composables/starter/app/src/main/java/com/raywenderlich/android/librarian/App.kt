@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020 Razeware LLC
+ * Copyright (c) 2022 Razeware LLC
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -62,22 +62,22 @@ class App : Application() {
     GlobalScope.launch {
       if (repository.getGenres().isEmpty()) {
         repository.addGenres(
-            listOf(
-                Genre(name = "Action"),
-                Genre(name = "Adventure"),
-                Genre(name = "Classic"),
-                Genre(name = "Mystery"),
-                Genre(name = "Fantasy"),
-                Genre(name = "Sci-Fi"),
-                Genre(name = "History"),
-                Genre(name = "Horror"),
-                Genre(name = "Romance"),
-                Genre(name = "Short Story"),
-                Genre(name = "Biography"),
-                Genre(name = "Poetry"),
-                Genre(name = "Self-Help"),
-                Genre(name = "Young fiction")
-            )
+          listOf(
+            Genre(name = "Action"),
+            Genre(name = "Adventure"),
+            Genre(name = "Classic"),
+            Genre(name = "Mystery"),
+            Genre(name = "Fantasy"),
+            Genre(name = "Sci-Fi"),
+            Genre(name = "History"),
+            Genre(name = "Horror"),
+            Genre(name = "Romance"),
+            Genre(name = "Short Story"),
+            Genre(name = "Biography"),
+            Genre(name = "Poetry"),
+            Genre(name = "Self-Help"),
+            Genre(name = "Young fiction")
+          )
         )
       }
     }

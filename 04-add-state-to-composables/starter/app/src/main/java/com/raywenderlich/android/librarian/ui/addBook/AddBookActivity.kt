@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020 Razeware LLC
+ * Copyright (c) 2022 Razeware LLC
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -85,17 +85,21 @@ class AddBookActivity : AppCompatActivity(), AddBookView {
     }
   }
 
+  /*
+  * Update Note: onBackPressed() is deprecated.
+  * Use onBackPressedDispatcher.onBackPressed() instead.
+  * */
   @Composable
   fun AddBookTopBar() {
     TopAppBar(title = {
       Text(text = stringResource(id = R.string.add_book_title))
     },
-      navigationIcon = {
-        IconButton(onClick = { onBackPressed() }) {
-          Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "Back")
-        }
-      }, contentColor = Color.White,
-      backgroundColor = colorResource(id = R.color.colorPrimary))
+    navigationIcon = {
+      IconButton(onClick = { onBackPressedDispatcher.onBackPressed() }) {
+        Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "Back")
+      }
+    }, contentColor = Color.White,
+    backgroundColor = colorResource(id = R.color.colorPrimary))
   }
 
   @Composable

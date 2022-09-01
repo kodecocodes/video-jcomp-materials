@@ -38,6 +38,7 @@
   <string name="confirm_filter">Confirm filter</string>
   <string name="generic_error">Something went wrong!</string>
   <string name="genre_select">Select Genre</string>
+  <string name="book_select">Select Book</string>
   <string name="book_review_details_title">Review Details</string>
   <string name="last_updated_date">Last updated: %s</string>
   <string name="current_selection">%s</string>

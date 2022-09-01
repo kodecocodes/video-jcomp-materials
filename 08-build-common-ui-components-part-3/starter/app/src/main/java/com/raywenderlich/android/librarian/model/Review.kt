@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020 Razeware LLC
+ * Copyright (c) 2022 Razeware LLC
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -40,7 +40,7 @@ import androidx.room.PrimaryKey
 import androidx.room.TypeConverters
 import com.raywenderlich.android.librarian.database.converters.DateConverter
 import com.raywenderlich.android.librarian.database.converters.ReadingEntryConverter
-import kotlinx.android.parcel.Parcelize
+import kotlinx.parcelize.Parcelize
 import java.util.*
 
 @Entity(tableName = "reviews")

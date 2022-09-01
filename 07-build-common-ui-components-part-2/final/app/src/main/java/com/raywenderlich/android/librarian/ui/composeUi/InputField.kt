@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 Razeware LLC
+ * Copyright (c) 2022 Razeware LLC
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -37,11 +37,13 @@ package com.raywenderlich.android.librarian.ui.composeUi
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -78,7 +80,8 @@ fun InputField(
       focusedLabelColor = focusedColor,
       unfocusedIndicatorColor = unfocusedColor,
       unfocusedLabelColor = unfocusedColor,
-      cursorColor = focusedColor
+      cursorColor = focusedColor,
+      backgroundColor = Color.White /* Update Note: Code added to use white color instead of default theme color. */
     )
   )
 }

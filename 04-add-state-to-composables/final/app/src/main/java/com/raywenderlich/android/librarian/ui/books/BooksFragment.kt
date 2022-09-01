@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020 Razeware LLC
+ * Copyright (c) 2022 Razeware LLC
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -69,6 +69,15 @@ private const val REQUEST_CODE_ADD_BOOK = 201
 @AndroidEntryPoint
 class BooksFragment : Fragment() {
 
+  private val addBookContract by lazy {
+    registerForActivityResult(AddBookContract()) { isBookCreated ->
+      if (isBookCreated) {
+        loadBooks()
+        activity?.toast("Book added!")
+      }
+    }
+  }
+
   @Inject
   lateinit var repository: LibrarianRepository
 
@@ -80,11 +89,18 @@ class BooksFragment : Fragment() {
     inflater: LayoutInflater, container: ViewGroup?,
     savedInstanceState: Bundle?
   ): View {
+    addBookContract
     return ComposeView(requireContext()).apply {
       setContent {
         BooksContent()
       }
     }
+  }
+
+  override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    super.onViewCreated(view, savedInstanceState)
+    loadGenres()
+    loadBooks()
   }
 
   @Composable
@@ -97,28 +113,17 @@ class BooksFragment : Fragment() {
 
   @Composable
   fun BooksTopBar() {
-    TopAppBar(
-      title = { Text(stringResource(id = R.string.my_books_title)) },
+    TopAppBar(title = { Text(stringResource(id = R.string.my_books_title)) },
       backgroundColor = colorResource(id = R.color.colorPrimary),
-      contentColor = Color.White
-    )
+      contentColor = Color.White)
   }
 
   @Composable
   @Preview
   fun AddNewBook() {
-    FloatingActionButton(
-      content = { Icon(Icons.Filled.Add) },
-      onClick = {
-        showAddBook()
-      },
-    )
-  }
-
-  override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-    super.onViewCreated(view, savedInstanceState)
-    loadGenres()
-    loadBooks()
+    FloatingActionButton(content = {
+     Icon(imageVector = Icons.Filled.Add, contentDescription = "Add Book")
+    }, onClick = { showAddBook() })
   }
 
   fun loadGenres() {
@@ -150,13 +155,6 @@ class BooksFragment : Fragment() {
   }
 
   private fun showAddBook() {
-    val addBook = registerForActivityResult(AddBookContract()) { isBookCreated ->
-      if (isBookCreated) {
-        loadBooks()
-        activity?.toast("Book added!")
-      }
-    }
-
-    addBook.launch(REQUEST_CODE_ADD_BOOK)
+    addBookContract.launch(REQUEST_CODE_ADD_BOOK)
   }
 }

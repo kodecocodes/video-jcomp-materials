@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020 Razeware LLC
+ * Copyright (c) 2022 Razeware LLC
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -37,24 +37,14 @@ package com.raywenderlich.android.librarian.ui.bookReviewDetails
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.material.FloatingActionButton
-import androidx.compose.material.Icon
-import androidx.compose.material.Scaffold
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.lifecycleScope
-import com.raywenderlich.android.librarian.R
 import com.raywenderlich.android.librarian.model.Genre
 import com.raywenderlich.android.librarian.model.ReadingEntry
 import com.raywenderlich.android.librarian.model.Review
 import com.raywenderlich.android.librarian.model.relations.BookReview
 import com.raywenderlich.android.librarian.repository.LibrarianRepository
-import com.raywenderlich.android.librarian.ui.composeUi.TopBar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import java.util.*
@@ -87,38 +77,6 @@ class BookReviewDetailsActivity : AppCompatActivity() {
       finish()
       return
     }
-
-    setReview(data)
-    setContent { BookReviewDetailsContent() }
-  }
-
-  @Composable
-  fun BookReviewDetailsContent() {
-    Scaffold(topBar = { BookReviewDetailsTopBar() },
-      floatingActionButton = { AddReadingEntry() }) {
-      BookReviewDetailsInformation()
-    }
-  }
-
-  @Composable
-  fun BookReviewDetailsTopBar() {
-    val reviewState = _bookReviewDetailsState.value
-    val bookName =
-      reviewState?.book?.name ?: stringResource(id = R.string.book_review_details_title)
-
-    TopBar(title = bookName, onBackPressed = { onBackPressed() })
-  }
-
-  @Composable
-  fun AddReadingEntry() {
-    FloatingActionButton(onClick = { }) {
-      Icon(imageVector = Icons.Default.Add, contentDescription = "Add Reading Entry")
-    }
-  }
-
-  @Composable
-  fun BookReviewDetailsInformation() {
-
   }
 
   fun setReview(bookReview: BookReview) {

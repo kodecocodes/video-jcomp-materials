@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020 Razeware LLC
+ * Copyright (c) 2022 Razeware LLC
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -43,11 +43,15 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.lifecycleScope
@@ -67,7 +71,7 @@ import javax.inject.Inject
 class AddBookActivity : AppCompatActivity(), AddBookView {
 
   private val _addBookState = MutableLiveData(AddBookState())
-  private val _genresState = MutableLiveData(emptyList<Genre>())
+  private val _genreState = MutableLiveData(emptyList<Genre>())
 
   @Inject
   lateinit var repository: LibrarianRepository
@@ -85,7 +89,7 @@ class AddBookActivity : AppCompatActivity(), AddBookView {
 
   private fun loadGenres() {
     lifecycleScope.launch {
-      _genresState.value = repository.getGenres()
+      _genreState.value = repository.getGenres()
     }
   }
 
@@ -96,16 +100,20 @@ class AddBookActivity : AppCompatActivity(), AddBookView {
     }
   }
 
+  /*
+  * Update Note: onBackPressed() is deprecated.
+  * Use onBackPressedDispatcher.onBackPressed() instead.
+  * */
   @Composable
   fun AddBookTopBar() {
     TopBar(
       title = stringResource(id = R.string.add_book_title),
-      onBackPressed = { onBackPressed() })
+      onBackPressed = { onBackPressedDispatcher.onBackPressed() })
   }
 
   @Composable
   fun AddBookFormContent() {
-    val genres = _genresState.value ?: emptyList()
+    val genres = _genreState.value ?: emptyList()
     val isGenresPickerOpen = remember { mutableStateOf(false) }
     val bookNameState = remember { mutableStateOf("") }
     val bookDescriptionState = remember { mutableStateOf("") }
@@ -145,7 +153,7 @@ class AddBookActivity : AppCompatActivity(), AddBookView {
             }
           }
         }
-
+        
         Text(text = selectedGenreName)
       }
 

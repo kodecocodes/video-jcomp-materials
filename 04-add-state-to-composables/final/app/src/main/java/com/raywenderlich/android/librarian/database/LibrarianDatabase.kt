@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020 Razeware LLC
+ * Copyright (c) 2022 Razeware LLC
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -57,8 +57,9 @@ import com.raywenderlich.android.librarian.model.Review
 const val DATABASE_VERSION = 4
 
 @Database(
-    entities = [Book::class, Genre::class, ReadingList::class, Review::class],
-    version = DATABASE_VERSION)
+  entities = [Book::class, Genre::class, ReadingList::class, Review::class],
+  version = DATABASE_VERSION
+)
 @TypeConverters(DateConverter::class, ReadingEntryConverter::class, BookIdsConverter::class)
 abstract class LibrarianDatabase : RoomDatabase() {
 
@@ -67,11 +68,11 @@ abstract class LibrarianDatabase : RoomDatabase() {
 
     fun buildDatabase(context: Context): LibrarianDatabase {
       return Room.databaseBuilder(
-          context,
-          LibrarianDatabase::class.java,
-          DATABASE_NAME
+        context,
+        LibrarianDatabase::class.java,
+        DATABASE_NAME
       ).addMigrations(migration_1_2, migration_2_3, migration_3_4)
-          .build()
+        .build()
     }
   }
 

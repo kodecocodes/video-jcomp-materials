@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020 Razeware LLC
+ * Copyright (c) 2022 Razeware LLC
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -50,7 +50,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.lifecycleScope
 import com.raywenderlich.android.librarian.R
 import com.raywenderlich.android.librarian.model.Book
@@ -151,7 +153,7 @@ class BooksFragment : Fragment() {
     val coroutineScope = rememberCoroutineScope()
 
     FloatingActionButton(content = {
-      Icon(imageVector = Icons.Filled.Add, contentDescription = "Add Book")
+     Icon(imageVector = Icons.Filled.Add, contentDescription = "Add Book")
     }, onClick = {
       coroutineScope.launch {
         bookFilterDrawerState.close()
@@ -168,7 +170,7 @@ class BooksFragment : Fragment() {
     BottomDrawer(
       drawerState = bookFilterDrawerState,
       gesturesEnabled = false,
-      drawerContent = {
+      drawerContent ={
         BookFilterModalDrawerContent(Modifier.align(CenterHorizontally), bookFilterDrawerState)
       }) {
       BooksList(books)

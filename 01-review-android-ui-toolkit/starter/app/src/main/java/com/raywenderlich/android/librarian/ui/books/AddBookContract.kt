@@ -8,7 +8,7 @@ import com.raywenderlich.android.librarian.ui.addBook.AddBookActivity
 
 class AddBookContract : ActivityResultContract<Int, Boolean>() {
 
-  override fun createIntent(context: Context, input: Int?): Intent {
+  override fun createIntent(context: Context, input: Int): Intent {
     return AddBookActivity.getIntent(context)
   }
 

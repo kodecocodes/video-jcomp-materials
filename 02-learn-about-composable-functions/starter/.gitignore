@@ -1,3 +1,5 @@
+.DS_Store
+
 # Built application files
 *.apk
 *.ap_
@@ -32,9 +34,12 @@ proguard/
 # Android Studio captures folder
 captures/
 
+# Intellij
+*.iml
+.idea
+
 # Keystore files
-# Uncomment the following line if you do not want to check your keystore files in.
-#*.jks
+*.jks
 
 # External native build folder generated in Android Studio 2.2 and later
 .externalNativeBuild
@@ -46,33 +51,3 @@ google-services.json
 freeline.py
 freeline/
 freeline_project_description.json
-
-# fastlane
-fastlane/report.xml
-fastlane/Preview.html
-fastlane/screenshots
-fastlane/test_output
-fastlane/readme.md
-
-# Custom
-
-.DS_Store
-.idea/vcs.xml
-.idea/misc.xml
-.idea/modules.xml
-
-# IDEA/Android Studio ignores
-*.iml
-*.ipr
-*.iws
-/.idea/*
-
-# IDEA/Android Studio Ignore exceptions
-!/.idea/vcs.xml
-!/.idea/fileTemplates/
-!/.idea/inspectionProfiles/
-!/.idea/scopes/
-!/.idea/codeStyles/
-!/.idea/encodings.xml
-!/.idea/copyright/
-!/.idea/compiler.xml

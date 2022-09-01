@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 Razeware LLC
+ * Copyright (c) 2022 Razeware LLC
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -56,6 +56,7 @@ import com.raywenderlich.android.librarian.ui.books.filter.ByRating
 import com.raywenderlich.android.librarian.ui.books.filter.Filter
 import com.raywenderlich.android.librarian.ui.composeUi.ActionButton
 import com.raywenderlich.android.librarian.ui.composeUi.GenrePicker
+import java.lang.IllegalArgumentException
 
 @Composable
 fun BookFilter(
@@ -86,12 +87,12 @@ fun BookFilter(
         )
 
         Text(text = stringResource(id = R.string.no_filter),
-          modifier = Modifier.align(CenterVertically))
+        modifier = Modifier.align(CenterVertically))
       }
 
       Row {
         RadioButton(selected = currentFilter.value == 1,
-          onClick = { currentFilter.value = 1 },
+          onClick = { currentFilter.value = 0 },
           modifier = Modifier.padding(8.dp)
         )
 
@@ -101,7 +102,7 @@ fun BookFilter(
 
       Row {
         RadioButton(selected = currentFilter.value == 2,
-          onClick = { currentFilter.value = 2 },
+          onClick = { currentFilter.value = 0 },
           modifier = Modifier.padding(8.dp)
         )
 

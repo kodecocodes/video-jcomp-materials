@@ -8,7 +8,7 @@ import com.raywenderlich.android.librarian.ui.addReview.AddBookReviewActivity
 
 class AddBookReviewContract : ActivityResultContract<Int, Boolean>() {
 
-  override fun createIntent(context: Context, input: Int?): Intent {
+  override fun createIntent(context: Context, input: Int): Intent {
     return AddBookReviewActivity.getIntent(context)
   }
 

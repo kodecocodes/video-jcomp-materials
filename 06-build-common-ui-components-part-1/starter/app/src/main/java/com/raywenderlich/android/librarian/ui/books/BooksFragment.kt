@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020 Razeware LLC
+ * Copyright (c) 2022 Razeware LLC
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -38,17 +38,16 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.compose.material.FloatingActionButton
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
-import androidx.compose.material.Scaffold
+import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.lifecycleScope
@@ -122,15 +121,16 @@ class BooksFragment : Fragment() {
 
   @Composable
   fun FilterButton() {
-    IconButton(onClick = { /*TODO*/ }) {
+    IconButton(onClick = { /* TODO */ }) {
       Icon(imageVector = Icons.Default.Edit, tint = Color.White, contentDescription = "Filter")
     }
   }
 
   @Composable
+  @Preview
   fun AddNewBook() {
     FloatingActionButton(content = {
-      Icon(imageVector = Icons.Filled.Add, contentDescription = "Add Book")
+     Icon(imageVector = Icons.Filled.Add, contentDescription = "Add Book")
     }, onClick = { showAddBook() })
   }
 
