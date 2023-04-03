@@ -50,19 +50,6 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
           // ui code goes here
-          TitleText(name = "Hello Compose!!")
         }
     }
-}
-
-@Preview
-@Composable
-fun TitleText(name: String = "Hello World"){
-  Text(text = name)
-}
-
-@Preview
-@Composable
-fun AppPreview(){
-  TitleText(name = "Jetpack Compose Preview")
 }
