@@ -46,11 +46,11 @@ import androidx.compose.ui.tooling.preview.Preview
  */
 class MainActivity : ComponentActivity() {
 
-    override fun onCreate(savedInstanceState: Bundle?) {
+    override fun onCreate(savedInstanceState: Bundle?) {  
         super.onCreate(savedInstanceState)
         setContent {
           // ui code goes here
-          TitleText(name = "Hello Compose!!")
+          TitleText(name = "Jetpack")
         }
     }
 }
@@ -64,5 +64,5 @@ fun TitleText(name: String = "Hello World"){
 @Preview
 @Composable
 fun AppPreview(){
-  TitleText(name = "Jetpack Compose Preview")
+  TitleText(name = "Hello new Preview")
 }
