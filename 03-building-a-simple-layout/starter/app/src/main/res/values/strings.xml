@@ -1,0 +1,5 @@
+<resources>
+  <string name="app_name">YummyApp</string>
+  <!--content descriptions-->
+  <string name="profile">Profile Icon</string>
+</resources>
