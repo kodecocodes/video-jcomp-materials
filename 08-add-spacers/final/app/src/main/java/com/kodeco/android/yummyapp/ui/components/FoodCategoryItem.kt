@@ -37,6 +37,7 @@ package com.kodeco.android.yummyapp.ui.components
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.MaterialTheme
@@ -52,10 +53,11 @@ import androidx.compose.ui.unit.dp
 import com.kodeco.android.yummyapp.R
 
 
+@Preview
 @Composable
 fun FoodCategoryItem(
-    @DrawableRes icon: Int,
-    category: String
+    @DrawableRes icon: Int = R.drawable.food_melon,
+    category: String = "Melon"
 ){
 
   Column(
@@ -64,14 +66,16 @@ fun FoodCategoryItem(
   ) {
 
     Image(
-        modifier = Modifier.size(75.dp),
+        modifier = Modifier.size(55.dp),
         painter = painterResource(id = icon),
         contentDescription = null,
     )
 
+    Spacer(modifier = Modifier.size(5.dp))
+
     Text(
         text = category,
-        modifier = Modifier.padding(top = 5.dp),
+        modifier = Modifier,
         textAlign = TextAlign.Center,
         fontWeight = FontWeight.Bold,
         style = MaterialTheme.typography.bodyMedium)

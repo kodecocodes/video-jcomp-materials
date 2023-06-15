@@ -37,6 +37,7 @@ package com.kodeco.android.yummyapp
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
@@ -52,29 +53,33 @@ import androidx.compose.ui.unit.dp
 fun RowDemo() {
   Row(
       modifier = Modifier
-        .fillMaxSize()
-        .background(Color.LightGray),
-      verticalAlignment = Alignment.CenterVertically,
-      horizontalArrangement = Arrangement.SpaceEvenly) {
+          .fillMaxSize()
+          .background(Color.LightGray),
+      verticalAlignment = Alignment.Top) {
 
     Text(
         text = "Item 1",
         modifier = Modifier
             .background(Color.Green)
             .padding(16.dp)
+            .weight(2f)
     )
+
+    Spacer(modifier = Modifier.weight(1f))
+
     Text(
         text = "Item 2",
         modifier = Modifier
             .background(Color.Blue)
             .padding(16.dp)
-            .align(Alignment.Bottom)
+            .weight(1f)
     )
     Text(
         text = "Item 3",
         modifier = Modifier
             .background(Color.Red)
             .padding(16.dp)
+            .weight(1f)
     )
 
   }
