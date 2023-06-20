@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 Kodeco LLC
+ * Copyright (c) 2023 Razeware LLC
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -32,31 +32,42 @@
  * THE SOFTWARE.
  */
 
-package com.kodeco.android.yummyapp
+package com.kodeco.android.yummyapp.ui.components
 
-import android.os.Bundle
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
-import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.annotation.DrawableRes
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.tooling.preview.Preview
-import com.kodeco.android.yummyapp.ui.screens.FoodDetails
-import com.kodeco.android.yummyapp.ui.screens.HomeScreen
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
 
-/**
- * Main Screen
- */
-class MainActivity : ComponentActivity() {
+@Composable
+fun FoodDetailsMeasure(
+    @DrawableRes icon: Int,
+    text: String,
+    iconColor: Color
+) {
 
-    @ExperimentalMaterial3Api
-    override fun onCreate(savedInstanceState: Bundle?) {  
-        super.onCreate(savedInstanceState)
-        setContent {
-          // ui code goes here
-          //HomeScreen()
-          FoodDetails()
-        }
-    }
+  Row( modifier = Modifier, verticalAlignment = Alignment.CenterVertically ) {
+
+    Icon(
+        modifier = Modifier.padding(end = 5.dp),
+        painter = painterResource(id = icon),
+        contentDescription = "Measure",
+        tint = iconColor)
+
+    Text(
+        text = text,
+        style = MaterialTheme.typography.bodyMedium,
+        fontWeight = FontWeight.Medium)
+
+  }
+
 }
-

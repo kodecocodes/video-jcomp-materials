@@ -83,5 +83,11 @@ import com.kodeco.android.yummyapp.ui.components.FoodItem
 @Composable
 fun TestPage() {
 
+  var clicks by remember { mutableStateOf(0) }
+
+  Button(onClick = {  }) {
+    Text(text = "Clicked $clicks time(s)")
+    clicks++
+  }
 
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 Kodeco LLC
+ * Copyright (c) 2023 Razeware LLC
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -32,31 +32,50 @@
  * THE SOFTWARE.
  */
 
-package com.kodeco.android.yummyapp
+package com.kodeco.android.yummyapp.ui.screens
 
-import android.os.Bundle
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.kodeco.android.yummyapp.ui.screens.FoodDetails
-import com.kodeco.android.yummyapp.ui.screens.HomeScreen
+import androidx.compose.ui.unit.dp
+import com.kodeco.android.yummyapp.data.getFood
+import com.kodeco.android.yummyapp.ui.components.BottomNavBar
+import com.kodeco.android.yummyapp.ui.components.FoodItem
+import com.kodeco.android.yummyapp.ui.components.HomeSection
+import com.kodeco.android.yummyapp.ui.components.ProfileBar
+import com.kodeco.android.yummyapp.ui.components.SearchBar
 
-/**
- * Main Screen
- */
-class MainActivity : ComponentActivity() {
+@Preview
+@ExperimentalMaterial3Api
+@Composable
+fun HomeScreen() {
+  Scaffold(
+      contentWindowInsets = WindowInsets(left = 8.dp, right = 8.dp),
+      topBar = {
+        ProfileBar()
+      },
+      bottomBar = {
+        BottomNavBar()
+      }
+  ) {
+    paddingValues ->
 
-    @ExperimentalMaterial3Api
-    override fun onCreate(savedInstanceState: Bundle?) {  
-        super.onCreate(savedInstanceState)
-        setContent {
-          // ui code goes here
-          //HomeScreen()
-          FoodDetails()
-        }
+    Column(modifier = Modifier
+        .fillMaxSize()
+        .padding(paddingValues)) {
+
+      SearchBar()
+
+      HomeSection()
+
     }
-}
 
+  }
+}

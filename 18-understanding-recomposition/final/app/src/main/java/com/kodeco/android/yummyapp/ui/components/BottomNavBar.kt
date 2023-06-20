@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 Kodeco LLC
+ * Copyright (c) 2023 Razeware LLC
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -32,31 +32,51 @@
  * THE SOFTWARE.
  */
 
-package com.kodeco.android.yummyapp
+package com.kodeco.android.yummyapp.ui.components
 
-import android.os.Bundle
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
-import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.tooling.preview.Preview
-import com.kodeco.android.yummyapp.ui.screens.FoodDetails
-import com.kodeco.android.yummyapp.ui.screens.HomeScreen
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 
-/**
- * Main Screen
- */
-class MainActivity : ComponentActivity() {
+@Composable
+fun BottomBarItem(
+    modifier: Modifier = Modifier,
+    title: String
+) {
 
-    @ExperimentalMaterial3Api
-    override fun onCreate(savedInstanceState: Bundle?) {  
-        super.onCreate(savedInstanceState)
-        setContent {
-          // ui code goes here
-          //HomeScreen()
-          FoodDetails()
-        }
-    }
+  Text(
+      text = title,
+      modifier = modifier,
+      fontStyle = FontStyle.Normal,
+      fontSize = 21.sp)
+
 }
 
+@Preview
+@Composable
+fun BottomNavBar() {
+
+  Row(modifier = Modifier
+      .fillMaxWidth()
+      .height(56.dp),
+      horizontalArrangement = Arrangement.SpaceEvenly,
+      verticalAlignment = Alignment.CenterVertically) {
+
+    BottomBarItem(title = "Home")
+
+    BottomBarItem(title = "Search")
+
+    BottomBarItem(title = "Profile")
+
+  }
+
+}
