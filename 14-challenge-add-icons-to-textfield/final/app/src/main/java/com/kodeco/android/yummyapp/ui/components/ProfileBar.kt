@@ -32,73 +32,72 @@
  * THE SOFTWARE.
  */
 
-package com.kodeco.android.yummyapp
+package com.kodeco.android.yummyapp.ui.components
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material3.Checkbox
-import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import com.kodeco.android.yummyapp.R
 
-@Preview
-@ExperimentalMaterial3Api
 @Composable
-fun TestPage() {
+fun ProfileBar(){
+  Row(
+      modifier = Modifier
+          .fillMaxWidth()
+          .padding(16.dp)) {
+
+    Image(
+        painter = painterResource(id = R.drawable.ic_profile),
+        contentDescription = null,
+        modifier = Modifier.size(50.dp))
 
     Column(
         modifier = Modifier
-            .fillMaxSize()
-            .background(color = Color.White),
-        verticalArrangement = Arrangement.SpaceEvenly) {
+            .width(200.dp)
+            .height(100.dp)
+            .padding(10.dp),
+        verticalArrangement = Arrangement.SpaceBetween) {
 
-      LabeledCheckBox(
-          checked = false,
-          onCheckChange = {},
-          label = "Regular CheckBox")
-      LabeledCheckBox(
-          checked = true,
-          onCheckChange = {},
-          enabled = false,
-          label = "Disabled CheckBox")
-
-      RadioButton(selected = true, onClick = { /*TODO*/ }, enabled = false)
-
-      RadioButton(selected = false, onClick = { /*TODO*/ })
+      Text(
+          text = "Hello, Kodeco",
+          style = MaterialTheme.typography.bodyLarge)
 
     }
 
-}
 
-@Composable
-fun LabeledCheckBox(
-    modifier: Modifier = Modifier,
-    label: String,
-    checked: Boolean,
-    enabled: Boolean = true,
-    onCheckChange: (Boolean) -> Unit = {}
-) {
-  Row(
-      modifier = modifier,
-      verticalAlignment = Alignment.CenterVertically) {
 
-      Checkbox(checked = checked, onCheckedChange = onCheckChange, enabled = enabled)
+    Box(
+        modifier = Modifier
+            .background(color = Color.White, shape = CircleShape)
+            .size(50.dp)
+            .clip(CircleShape),
+        contentAlignment = Alignment.Center) {
 
-      Spacer(modifier = Modifier.size(5.dp))
+      Image(
+          painter = painterResource(id = R.drawable.ic_notifications),
+          contentDescription = null)
 
-      Text(text = label, style = MaterialTheme.typography.labelSmall)
+    }
+
+
 
   }
 }

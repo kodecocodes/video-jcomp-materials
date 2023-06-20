@@ -32,73 +32,42 @@
  * THE SOFTWARE.
  */
 
-package com.kodeco.android.yummyapp
+package com.kodeco.android.yummyapp.ui.screens
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.size
-import androidx.compose.material3.Checkbox
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.RadioButton
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
+import com.kodeco.android.yummyapp.data.getFood
+import com.kodeco.android.yummyapp.ui.components.FoodItem
+import com.kodeco.android.yummyapp.ui.components.ProfileBar
 
-@Preview
 @ExperimentalMaterial3Api
 @Composable
-fun TestPage() {
+fun HomeScreen() {
+  Scaffold(
+      topBar = {
+        ProfileBar()
+      },
+      bottomBar = {
+        Text(text = "Bottom Bar")
+      }
+  ) {
+    paddingValues ->
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(color = Color.White),
-        verticalArrangement = Arrangement.SpaceEvenly) {
+    Column(modifier = Modifier
+        .fillMaxSize()
+        .padding(paddingValues)) {
 
-      LabeledCheckBox(
-          checked = false,
-          onCheckChange = {},
-          label = "Regular CheckBox")
-      LabeledCheckBox(
-          checked = true,
-          onCheckChange = {},
-          enabled = false,
-          label = "Disabled CheckBox")
+      Text(text = "Home Screen")
 
-      RadioButton(selected = true, onClick = { /*TODO*/ }, enabled = false)
-
-      RadioButton(selected = false, onClick = { /*TODO*/ })
+      FoodItem(food = getFood()[1])
 
     }
-
-}
-
-@Composable
-fun LabeledCheckBox(
-    modifier: Modifier = Modifier,
-    label: String,
-    checked: Boolean,
-    enabled: Boolean = true,
-    onCheckChange: (Boolean) -> Unit = {}
-) {
-  Row(
-      modifier = modifier,
-      verticalAlignment = Alignment.CenterVertically) {
-
-      Checkbox(checked = checked, onCheckedChange = onCheckChange, enabled = enabled)
-
-      Spacer(modifier = Modifier.size(5.dp))
-
-      Text(text = label, style = MaterialTheme.typography.labelSmall)
 
   }
 }

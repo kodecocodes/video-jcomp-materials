@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 Razeware LLC
+ * Copyright (c) 2022 Kodeco LLC
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -34,71 +34,38 @@
 
 package com.kodeco.android.yummyapp
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.size
-import androidx.compose.material3.Checkbox
+import android.os.Bundle
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
+import com.kodeco.android.yummyapp.ui.screens.HomeScreen
 
-@Preview
-@ExperimentalMaterial3Api
-@Composable
-fun TestPage() {
+/**
+ * Main Screen
+ */
+class MainActivity : ComponentActivity() {
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(color = Color.White),
-        verticalArrangement = Arrangement.SpaceEvenly) {
-
-      LabeledCheckBox(
-          checked = false,
-          onCheckChange = {},
-          label = "Regular CheckBox")
-      LabeledCheckBox(
-          checked = true,
-          onCheckChange = {},
-          enabled = false,
-          label = "Disabled CheckBox")
-
-      RadioButton(selected = true, onClick = { /*TODO*/ }, enabled = false)
-
-      RadioButton(selected = false, onClick = { /*TODO*/ })
-
+    @ExperimentalMaterial3Api
+    override fun onCreate(savedInstanceState: Bundle?) {  
+        super.onCreate(savedInstanceState)
+        setContent {
+          // ui code goes here
+          HomeScreen()
+        }
     }
-
 }
 
+@Preview
 @Composable
-fun LabeledCheckBox(
-    modifier: Modifier = Modifier,
-    label: String,
-    checked: Boolean,
-    enabled: Boolean = true,
-    onCheckChange: (Boolean) -> Unit = {}
-) {
-  Row(
-      modifier = modifier,
-      verticalAlignment = Alignment.CenterVertically) {
+fun TitleText(name: String = "Hello World"){
+  Text(text = name)
+}
 
-      Checkbox(checked = checked, onCheckedChange = onCheckChange, enabled = enabled)
-
-      Spacer(modifier = Modifier.size(5.dp))
-
-      Text(text = label, style = MaterialTheme.typography.labelSmall)
-
-  }
+@Preview
+@Composable
+fun AppPreview(){
+  TitleText(name = "Hello new Preview")
 }

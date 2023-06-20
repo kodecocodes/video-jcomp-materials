@@ -32,73 +32,54 @@
  * THE SOFTWARE.
  */
 
-package com.kodeco.android.yummyapp
+package com.kodeco.android.yummyapp.ui.components
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
+import androidx.annotation.DrawableRes
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material3.Checkbox
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.kodeco.android.yummyapp.R
+
 
 @Preview
-@ExperimentalMaterial3Api
 @Composable
-fun TestPage() {
+fun FoodCategoryItem(
+    @DrawableRes icon: Int = R.drawable.food_melon,
+    category: String = "Melon"
+){
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(color = Color.White),
-        verticalArrangement = Arrangement.SpaceEvenly) {
+  Column(
+      modifier = Modifier.size(75.dp),
+      horizontalAlignment = Alignment.CenterHorizontally
+  ) {
 
-      LabeledCheckBox(
-          checked = false,
-          onCheckChange = {},
-          label = "Regular CheckBox")
-      LabeledCheckBox(
-          checked = true,
-          onCheckChange = {},
-          enabled = false,
-          label = "Disabled CheckBox")
+    Image(
+        modifier = Modifier.size(55.dp),
+        painter = painterResource(id = icon),
+        contentDescription = null,
+    )
 
-      RadioButton(selected = true, onClick = { /*TODO*/ }, enabled = false)
+    Spacer(modifier = Modifier.size(5.dp))
 
-      RadioButton(selected = false, onClick = { /*TODO*/ })
-
-    }
-
-}
-
-@Composable
-fun LabeledCheckBox(
-    modifier: Modifier = Modifier,
-    label: String,
-    checked: Boolean,
-    enabled: Boolean = true,
-    onCheckChange: (Boolean) -> Unit = {}
-) {
-  Row(
-      modifier = modifier,
-      verticalAlignment = Alignment.CenterVertically) {
-
-      Checkbox(checked = checked, onCheckedChange = onCheckChange, enabled = enabled)
-
-      Spacer(modifier = Modifier.size(5.dp))
-
-      Text(text = label, style = MaterialTheme.typography.labelSmall)
+    Text(
+        text = category,
+        modifier = Modifier,
+        textAlign = TextAlign.Center,
+        fontWeight = FontWeight.Bold,
+        style = MaterialTheme.typography.bodyMedium)
 
   }
+
 }

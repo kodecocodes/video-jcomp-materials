@@ -32,73 +32,43 @@
  * THE SOFTWARE.
  */
 
-package com.kodeco.android.yummyapp
+package com.kodeco.android.yummyapp.ui.components
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
+import android.util.Log
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.size
-import androidx.compose.material3.Checkbox
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.RadioButton
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.kodeco.android.yummyapp.data.Food
 
-@Preview
-@ExperimentalMaterial3Api
 @Composable
-fun TestPage() {
+fun FoodItem(
+    food: Food
+) {
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(color = Color.White),
-        verticalArrangement = Arrangement.SpaceEvenly) {
+  Column(modifier = Modifier
+      .fillMaxWidth()
+      .padding(bottom = 5.dp)) {
 
-      LabeledCheckBox(
-          checked = false,
-          onCheckChange = {},
-          label = "Regular CheckBox")
-      LabeledCheckBox(
-          checked = true,
-          onCheckChange = {},
-          enabled = false,
-          label = "Disabled CheckBox")
+    Button(
+        onClick = { Log.d("FoodItem", "Clicked: ${food.name}") },
+        shape = RoundedCornerShape(8.dp),
+        colors = ButtonDefaults.buttonColors(
+          containerColor = Color.Red,
+          contentColor = Color.White,
+          disabledContentColor = Color.Gray)) {
 
-      RadioButton(selected = true, onClick = { /*TODO*/ }, enabled = false)
-
-      RadioButton(selected = false, onClick = { /*TODO*/ })
+      Text(text = "View Details")
 
     }
 
-}
-
-@Composable
-fun LabeledCheckBox(
-    modifier: Modifier = Modifier,
-    label: String,
-    checked: Boolean,
-    enabled: Boolean = true,
-    onCheckChange: (Boolean) -> Unit = {}
-) {
-  Row(
-      modifier = modifier,
-      verticalAlignment = Alignment.CenterVertically) {
-
-      Checkbox(checked = checked, onCheckedChange = onCheckChange, enabled = enabled)
-
-      Spacer(modifier = Modifier.size(5.dp))
-
-      Text(text = label, style = MaterialTheme.typography.labelSmall)
-
   }
+
 }

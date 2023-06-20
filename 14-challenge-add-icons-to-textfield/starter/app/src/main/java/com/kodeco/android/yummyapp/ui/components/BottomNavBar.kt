@@ -32,73 +32,51 @@
  * THE SOFTWARE.
  */
 
-package com.kodeco.android.yummyapp
+package com.kodeco.android.yummyapp.ui.components
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.size
-import androidx.compose.material3.Checkbox
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.RadioButton
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 
-@Preview
-@ExperimentalMaterial3Api
 @Composable
-fun TestPage() {
+fun BottomBarItem(
+    modifier: Modifier = Modifier,
+    title: String
+) {
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(color = Color.White),
-        verticalArrangement = Arrangement.SpaceEvenly) {
-
-      LabeledCheckBox(
-          checked = false,
-          onCheckChange = {},
-          label = "Regular CheckBox")
-      LabeledCheckBox(
-          checked = true,
-          onCheckChange = {},
-          enabled = false,
-          label = "Disabled CheckBox")
-
-      RadioButton(selected = true, onClick = { /*TODO*/ }, enabled = false)
-
-      RadioButton(selected = false, onClick = { /*TODO*/ })
-
-    }
+  Text(
+      text = title,
+      modifier = modifier,
+      fontStyle = FontStyle.Italic,
+      fontSize = 10.sp)
 
 }
 
+@Preview
 @Composable
-fun LabeledCheckBox(
-    modifier: Modifier = Modifier,
-    label: String,
-    checked: Boolean,
-    enabled: Boolean = true,
-    onCheckChange: (Boolean) -> Unit = {}
-) {
-  Row(
-      modifier = modifier,
+fun BottomNavBar() {
+
+  Row(modifier = Modifier
+      .fillMaxWidth()
+      .height(56.dp),
+      horizontalArrangement = Arrangement.SpaceEvenly,
       verticalAlignment = Alignment.CenterVertically) {
 
-      Checkbox(checked = checked, onCheckedChange = onCheckChange, enabled = enabled)
+    BottomBarItem(title = "Home")
 
-      Spacer(modifier = Modifier.size(5.dp))
+    BottomBarItem(title = "Search")
 
-      Text(text = label, style = MaterialTheme.typography.labelSmall)
+    BottomBarItem(title = "Profile")
 
   }
+
 }
