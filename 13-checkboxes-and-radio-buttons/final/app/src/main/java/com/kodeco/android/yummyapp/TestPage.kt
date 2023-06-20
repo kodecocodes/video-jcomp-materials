@@ -76,15 +76,11 @@ fun TestPage() {
 
       LabeledCheckBox(
           checked = false,
-          onCheckChange = {
-
-          },
+          onCheckChange = {},
           label = "Regular CheckBox")
       LabeledCheckBox(
           checked = true,
-          onCheckChange = {
-
-          },
+          onCheckChange = {},
           enabled = false,
           label = "Disabled CheckBox")
 
